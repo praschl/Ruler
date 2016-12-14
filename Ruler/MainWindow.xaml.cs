@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -14,6 +16,29 @@ namespace Ruler
         public MainWindow()
         {
             InitializeComponent();
+
+            InitializeSizingBoxes();
+        }
+
+        private void InitializeSizingBoxes()
+        {
+            double w2bs = Width - 2 * BoxSize;
+            double h2bs = Height - 2 * BoxSize;
+            double wr = Width - BoxSize;
+            double hb = Height - BoxSize;
+
+            _sizingBoxes = new[]
+            {
+                new SizingBox { Rect = new Rect(BoxSize, BoxSize, w2bs, h2bs), Cursor = Cursors.Arrow }, // center
+                new SizingBox { Rect = new Rect(0, 0, BoxSize, BoxSize), Cursor = Cursors.SizeNWSE, SizeLeft = true, SizeTop = true },
+                new SizingBox { Rect = new Rect(BoxSize, 0, w2bs, BoxSize), Cursor = Cursors.SizeNS, SizeTop = true },
+                new SizingBox { Rect = new Rect(wr, 0, BoxSize, BoxSize), Cursor = Cursors.SizeNESW, SizeRight = true, SizeTop = true },
+                new SizingBox { Rect = new Rect(wr, BoxSize, BoxSize, h2bs), Cursor = Cursors.SizeWE, SizeRight = true },
+                new SizingBox { Rect = new Rect(wr, hb, BoxSize, BoxSize), Cursor = Cursors.SizeNWSE, SizeRight = true, SizeBottom = true },
+                new SizingBox { Rect = new Rect(BoxSize, hb, w2bs, BoxSize), Cursor = Cursors.SizeNS, SizeBottom = true },
+                new SizingBox { Rect = new Rect(0, hb, BoxSize, BoxSize), Cursor = Cursors.SizeNESW, SizeLeft = true, SizeBottom = true },
+                new SizingBox { Rect = new Rect(0, BoxSize, BoxSize, h2bs), Cursor = Cursors.SizeWE, SizeLeft = true },
+            };
         }
 
         private void Canvas_Loaded(object sender, RoutedEventArgs e)
@@ -41,7 +66,7 @@ namespace Ruler
                     length = 8;
                 if (x % 50 == 0)
                     length = 12;
-                
+
                 Line gridline = new Line();
                 gridline.Stroke = Brushes.Black;
                 gridline.StrokeThickness = 1.0;
@@ -49,28 +74,28 @@ namespace Ruler
                 gridline.X2 = x;
                 gridline.Y1 = 0;
                 gridline.Y2 = length;
-                
+
                 canvas.Children.Add(gridline);
             }
         }
 
-        bool _resizing = false;
-        Point _position;
-
         private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {            
-            DragMove();
-
-            //CaptureMouse();
-            //_resizing = true;
-            //_position = e.GetPosition(this);
+        {
+            if (Cursor == Cursors.Arrow)
+                DragMove();
+            else
+            {
+                CaptureMouse();
+                _resizing = true;
+                _resizeClickPosition = e.GetPosition(this);
+            }
         }
 
         private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            //_resizing = false;
+            _resizing = false;
 
-            //ReleaseMouseCapture();
+            ReleaseMouseCapture();
         }
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
@@ -82,25 +107,106 @@ namespace Ruler
 
             if (_resizing)
             {
-                var newPos = e.GetPosition(this);
-                Vector delta = newPos - _position;
-                _position = newPos;
-
-                Width += delta.X;
-                Height += delta.Y;
+                DoResizing(e);
             }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            RecalculateSizingBoxes();
+            DrawRuler(_ticksCanvas);
+        }
+
+        private bool _resizing = false;
+        private Point _resizeClickPosition;
+        private const int BoxSize = 5;
+        private SizingBox[] _sizingBoxes;
+        private SizingBox _currentSizingBox;
+
+        private void DoResizing(MouseEventArgs e)
+        {
+            var newPos = e.GetPosition(this);
+            Vector delta = newPos - _resizeClickPosition;
+
+            double left = Left;
+            double top = Top;
+            double width = Width;
+            double height = Height;
+
+            if (_currentSizingBox.SizeLeft)
+            {
+                width -= delta.X;
+                if (width > MinWidth)
+                    left += delta.X;
+            }
+
+            if (_currentSizingBox.SizeTop)
+            {
+                height -= delta.Y;
+                if (height > MinHeight)
+                    top += delta.Y;
+            }
+
+            if (_currentSizingBox.SizeRight)
+            {
+                width += delta.X;
+                _resizeClickPosition.X = newPos.X;                
+            }
+
+            if (_currentSizingBox.SizeBottom)
+            {
+                height += delta.Y;
+                _resizeClickPosition.Y = newPos.Y;               
+            }
+
+         
+            if (left > 0 && left < 1980)
+                Left = left;
+            if (top > 0 && top < 1100)
+                Top = top;
+            if (width > MinWidth && width < MaxWidth)
+                Width = width;
+            if (height > MinHeight && height < MaxHeight)
+                Height = height;
         }
 
         private void CheckSizingBox(MouseEventArgs e)
         {
             var pos = e.GetPosition(this);
 
+            _currentSizingBox = _sizingBoxes.FirstOrDefault(b => b.Rect.Contains(pos));
 
+            if (_currentSizingBox != null)
+                Cursor = _currentSizingBox.Cursor;
         }
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        
+        private void RecalculateSizingBoxes()
         {
-            DrawRuler(_ticksCanvas);
+            double w2bs = Width - 2 * BoxSize;
+            double h2bs = Height - 2 * BoxSize;
+            double wr = Width - BoxSize;
+            double hb = Height - BoxSize;
+
+            _sizingBoxes[0].Rect = new Rect(BoxSize, BoxSize, w2bs, h2bs);
+            _sizingBoxes[2].Rect = new Rect(BoxSize, 0, w2bs, BoxSize);
+            _sizingBoxes[3].Rect = new Rect(wr, 0, BoxSize, BoxSize);
+            _sizingBoxes[4].Rect = new Rect(wr, BoxSize, BoxSize, h2bs);
+            _sizingBoxes[5].Rect = new Rect(wr, hb, BoxSize, BoxSize);
+            _sizingBoxes[6].Rect = new Rect(BoxSize, hb, w2bs, BoxSize);
+            _sizingBoxes[7].Rect = new Rect(0, hb, BoxSize, BoxSize);
+            _sizingBoxes[8].Rect = new Rect(0, BoxSize, BoxSize, h2bs);
         }
+
+        private class SizingBox
+        {
+            public Rect Rect;
+            public Cursor Cursor;
+            public bool SizeLeft;
+            public bool SizeRight;
+            public bool SizeTop;
+            public bool SizeBottom;
+        }
+
+
     }
 }

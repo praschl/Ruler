@@ -13,7 +13,8 @@
         MouseLeftButtonUp="Window_MouseLeftButtonUp"
         MouseMove="Window_MouseMove"
         SizeChanged="Window_SizeChanged"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" 
+        Width="525" Height="350" MinWidth="100" MinHeight="75">
     <Grid>
         <Canvas Name="_ticksCanvas" Background="WhiteSmoke" Loaded="Canvas_Loaded" Opacity="0.8" />
     </Grid>

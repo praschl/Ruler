@@ -52,6 +52,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BlackBorder.cs" />
+    <Compile Include="BottomRuler.cs" />
+    <Compile Include="RedLine.cs" />
+    <Compile Include="TopRuler.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

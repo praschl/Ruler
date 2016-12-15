@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Ruler"
+        xmlns:ruler="clr-namespace:Ruler"
         mc:Ignorable="d"
         AllowsTransparency="True"
         WindowStyle="None"
@@ -13,9 +13,16 @@
         MouseLeftButtonUp="Window_MouseLeftButtonUp"
         MouseMove="Window_MouseMove"
         SizeChanged="Window_SizeChanged"
-        Title="MainWindow" 
-        Width="525" Height="350" MinWidth="100" MinHeight="75">
-    <Grid>
-        <Canvas Name="_ticksCanvas" Background="WhiteSmoke" Loaded="Canvas_Loaded" Opacity="0.8" />
+        ResizeMode="NoResize"
+        Title="MainWindow"
+        Width="525" Height="50" MinWidth="100" MinHeight="75">
+    <Grid Opacity="0.9">
+        <Canvas Background="White"></Canvas>
+        <DockPanel LastChildFill="False">
+            <ruler:TopRuler DockPanel.Dock="Top" Height="30" Background="White" />
+            <ruler:BottomRuler DockPanel.Dock="Bottom" Height="30" Background="White" />
+        </DockPanel>
+        <ruler:BlackBorder Background="Transparent"></ruler:BlackBorder>
+        <ruler:RedLine Background="Transparent"></ruler:RedLine>
     </Grid>
 </Window>

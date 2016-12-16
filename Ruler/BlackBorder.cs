@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Ruler
+namespace MiP.Ruler
 {
     public class BlackBorder : Canvas
     {

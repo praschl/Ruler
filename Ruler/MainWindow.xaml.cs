@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace Ruler
+namespace MiP.Ruler
 {
     public partial class MainWindow
     {

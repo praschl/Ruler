@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Ruler
+namespace MiP.Ruler
 {
     /// <summary>
     /// Interaktionslogik für "App.xaml"

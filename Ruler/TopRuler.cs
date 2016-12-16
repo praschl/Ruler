@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Ruler
+namespace MiP.Ruler
 {
     public class TopRuler : Canvas
     {
@@ -19,7 +19,7 @@ namespace Ruler
         
         private void DrawRuler()
         {
-            for (var x = 0; x < SystemParameters.PrimaryScreenWidth; x += 2)
+            for (var x = 0; x <= SystemParameters.PrimaryScreenWidth; x += 2)
             {
                 var length = 4;
                 if (x % 10 == 0)
@@ -37,6 +37,15 @@ namespace Ruler
                     Y2 = length
                 };
                 Children.Add(gridline);
+
+                if (x % 100 == 0)
+                {
+                    var markBlock = new TextBlock {Text = x.ToString("#")};
+                    Children.Add(markBlock);
+                    markBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                    SetTop(markBlock, 12);
+                    SetLeft(markBlock, x - markBlock.DesiredSize.Width/2);
+                }
             }
         }
     }

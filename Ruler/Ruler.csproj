@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5575053F-47BF-43BC-869C-C9EDBFBF77E3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Ruler</RootNamespace>
+    <RootNamespace>MiP.Ruler</RootNamespace>
     <AssemblyName>Ruler</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,6 +55,7 @@
     <Compile Include="BlackBorder.cs" />
     <Compile Include="BottomRuler.cs" />
     <Compile Include="RedLine.cs" />
+    <Compile Include="TODO.cs" />
     <Compile Include="TopRuler.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

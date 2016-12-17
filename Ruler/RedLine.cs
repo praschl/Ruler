@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -55,7 +54,6 @@ namespace MiP.Ruler
             _redLine.X1 = _redLine.X2 = pos.X;
 
             _pixelText.Text = pos.X.ToString("#");
-            Console.WriteLine(_pixelText.Text);
             _pixelText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
             if (pos.X >= _pixelText.DesiredSize.Width + 4)

@@ -15,14 +15,18 @@
         SizeChanged="Window_SizeChanged"
         ResizeMode="NoResize"
         Title="MainWindow"
-        Width="525" Height="50" MinWidth="100" MinHeight="75">
+        Width="525" Height="50" MinWidth="100" MinHeight="75"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        KeyDown="MainWindow_OnKeyDown"
+        >
+
     <Grid Opacity="0.9">
-        <Canvas Background="White"></Canvas>
+        <Canvas Background="White" />
         <DockPanel LastChildFill="False">
             <ruler:TopRuler DockPanel.Dock="Top" Height="30" Background="White" />
             <ruler:BottomRuler DockPanel.Dock="Bottom" Height="15" Background="White" />
         </DockPanel>
-        <ruler:BlackBorder Background="Transparent"></ruler:BlackBorder>
-        <ruler:RedLine Background="Transparent"></ruler:RedLine>
+        <ruler:BlackBorder Background="Transparent" />
+        <ruler:RedLine Background="Transparent" />
     </Grid>
 </Window>

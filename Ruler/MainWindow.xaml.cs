@@ -6,6 +6,13 @@ namespace MiP.Ruler
 {
     public partial class MainWindow
     {
+        private const int BoxSize = 5;
+        private SizingBox _currentSizingBox;
+        private Point _resizeClickPosition;
+
+        private bool _resizing;
+        private SizingBox[] _sizingBoxes;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -35,26 +42,16 @@ namespace MiP.Ruler
         private void Window_MouseMove(object sender, MouseEventArgs e)
         {
             if (!_resizing)
-            {
                 CheckSizingBox(e);
-            }
 
             if (_resizing)
-            {
                 DoResizing(e);
-            }
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateSizingBoxes();
         }
-
-        private bool _resizing;
-        private Point _resizeClickPosition;
-        private const int BoxSize = 5;
-        private SizingBox[] _sizingBoxes;
-        private SizingBox _currentSizingBox;
 
         private void InitializeSizingBoxes()
         {
@@ -75,7 +72,7 @@ namespace MiP.Ruler
                 new SizingBox {Rect = new Rect(wr, hb, BoxSize, BoxSize), Cursor = Cursors.SizeNWSE, SizeRight = true, SizeBottom = true},
                 new SizingBox {Rect = new Rect(BoxSize, hb, w2bs, BoxSize), Cursor = Cursors.SizeNS, SizeBottom = true},
                 new SizingBox {Rect = new Rect(0, hb, BoxSize, BoxSize), Cursor = Cursors.SizeNESW, SizeLeft = true, SizeBottom = true},
-                new SizingBox {Rect = new Rect(0, BoxSize, BoxSize, h2bs), Cursor = Cursors.SizeWE, SizeLeft = true},
+                new SizingBox {Rect = new Rect(0, BoxSize, BoxSize, h2bs), Cursor = Cursors.SizeWE, SizeLeft = true}
             };
         }
 
@@ -114,14 +111,14 @@ namespace MiP.Ruler
                 height += delta.Y;
                 _resizeClickPosition.Y = newPos.Y;
             }
-            
-            if (left + width > 2*BoxSize && left < SystemParameters.PrimaryScreenWidth - BoxSize*2)
+
+            if ((left + width > 2*BoxSize) && (left < SystemParameters.PrimaryScreenWidth - BoxSize*2))
                 Left = left;
-            if (top + height > 2*BoxSize && top < SystemParameters.PrimaryScreenHeight - BoxSize*2)
+            if ((top + height > 2*BoxSize) && (top < SystemParameters.PrimaryScreenHeight - BoxSize*2))
                 Top = top;
-            if (width > MinWidth && width < MaxWidth)
+            if ((width > MinWidth) && (width < MaxWidth))
                 Width = width;
-            if (height > MinHeight && height < MaxHeight)
+            if ((height > MinHeight) && (height < MaxHeight))
                 Height = height;
         }
 
@@ -159,14 +156,41 @@ namespace MiP.Ruler
             _sizingBoxes[8].Rect.Height = h2bs;
         }
 
+        private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            var pixel = 1;
+            if (Keyboard.IsKeyDown(Key.LeftShift) | Keyboard.IsKeyDown(Key.RightShift))
+                pixel = 5;
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) | Keyboard.IsKeyDown(Key.RightCtrl))
+                pixel = 25;
+
+            switch (e.Key)
+            {
+                case Key.Left:
+                    Left -= pixel;
+                    break;
+                case Key.Right:
+                    Left += pixel;
+                    break;
+                case Key.Up:
+                    Top -= pixel;
+                    break;
+                case Key.Down:
+                    Top += pixel;
+                    break;
+                default:
+                    return;
+            }
+        }
+
         private class SizingBox
         {
-            public Rect Rect;
             public Cursor Cursor;
+            public Rect Rect;
+            public bool SizeBottom;
             public bool SizeLeft;
             public bool SizeRight;
             public bool SizeTop;
-            public bool SizeBottom;
         }
     }
 }

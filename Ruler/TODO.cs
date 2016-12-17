@@ -1,8 +1,13 @@
-﻿// per Links-Click rote Linien "fallenlassen"
-// per Rechts-Click rote Linien löschen
+﻿// Context Menu
+// - About
+// - Quit
+
+// per Links-Click rote Linien "fallenlassen"
+// per Context Menu rote Linien löschen
+
 // per Doppel-Click Vertikal/Horizontal
 
-// Settings über Context Menü
+// Settings über Context Menü bzw F4
 // - Transparenz (ggf auch über Scrollrad)
 // - Hintergrundfarbe
 // - "Rote Linie"-Farbe

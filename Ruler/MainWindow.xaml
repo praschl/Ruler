@@ -20,6 +20,13 @@
         KeyDown="MainWindow_OnKeyDown"
         >
 
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="About"></MenuItem>
+            <MenuItem Header="Quit" Command="{Binding CloseCommand}"></MenuItem>
+        </ContextMenu>
+    </Window.ContextMenu>
+    
     <Grid Opacity="0.9">
         <Canvas Background="White" />
         <DockPanel LastChildFill="False">

@@ -20,6 +20,8 @@ namespace MiP.Ruler
             InitializeSizingBoxes();
         }
 
+        public ICommand CloseCommand => new CloseCommand(this);
+
         private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (Cursor == Cursors.Arrow)
@@ -158,29 +160,27 @@ namespace MiP.Ruler
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
+            if (Keyboard.Modifiers == ModifierKeys.Alt && e.SystemKey != Key.F4)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // easier to implement than with a huge load of different key bindings
             var pixel = 1;
             if (Keyboard.IsKeyDown(Key.LeftShift) | Keyboard.IsKeyDown(Key.RightShift))
                 pixel = 5;
             if (Keyboard.IsKeyDown(Key.LeftCtrl) | Keyboard.IsKeyDown(Key.RightCtrl))
                 pixel = 25;
 
-            switch (e.Key)
-            {
-                case Key.Left:
-                    Left -= pixel;
-                    break;
-                case Key.Right:
-                    Left += pixel;
-                    break;
-                case Key.Up:
-                    Top -= pixel;
-                    break;
-                case Key.Down:
-                    Top += pixel;
-                    break;
-                default:
-                    return;
-            }
+            if (e.Key == Key.Left)
+                Left -= pixel;
+            if (e.Key == Key.Right)
+                Left += pixel;
+            if (e.Key == Key.Up)
+                Top -= pixel;
+            if (e.Key == Key.Down)
+                Top += pixel;
         }
 
         private class SizingBox

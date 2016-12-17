@@ -1,6 +1,7 @@
-﻿// Context Menu
+﻿// About Window
+
+// Context Menu
 // - About
-// - Quit
 
 // per Links-Click rote Linien "fallenlassen"
 // per Context Menu rote Linien löschen
@@ -11,6 +12,8 @@
 // - Transparenz (ggf auch über Scrollrad)
 // - Hintergrundfarbe
 // - "Rote Linie"-Farbe
+// - "Rote Linie" deaktivieren
+// - Größe des Sizing Grip
 
 // Settings (auch Größe + Position) beim Beenden speichern
 

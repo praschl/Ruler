@@ -19,7 +19,7 @@ namespace MiP.Ruler
         
         private void DrawRuler()
         {
-            for (var x = 0; x <= SystemParameters.PrimaryScreenWidth; x += 2)
+            for (var x = 0; x <= SystemParameters.PrimaryScreenWidth + 2; x += 2)
             {
                 var length = 4;
                 if (x % 10 == 0)
@@ -40,7 +40,7 @@ namespace MiP.Ruler
 
                 if (x % 100 == 0)
                 {
-                    var markBlock = new TextBlock {Text = x.ToString("#")};
+                    var markBlock = new TextBlock {Text = x.ToString("0")};
                     Children.Add(markBlock);
                     markBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                     SetTop(markBlock, 12);

@@ -21,14 +21,14 @@ namespace MiP.Ruler
         {
             Children.Clear();
 
-            for (var x = 0; x < SystemParameters.PrimaryScreenWidth; x += 2)
+            for (var x = 0; x < SystemParameters.PrimaryScreenWidth + 2; x += 2)
             {
                 var length = 4;
                 if (x%10 == 0)
                     length = 8;
                 if (x%50 == 0)
                     length = 12;
-                
+
                 var gridline = new Line
                 {
                     Stroke = Brushes.Black,

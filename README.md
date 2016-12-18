@@ -28,4 +28,4 @@ Doubleclick for toggling between horizontal / vertical ruler.
 Lots of settings
 
 ## Download
-Click [Here](https://praschl.github.com/ruler/Yar.zip)
+Click [Here](https://praschl.github.io/ruler/Yar.zip)

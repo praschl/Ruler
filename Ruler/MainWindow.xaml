@@ -20,9 +20,14 @@
         KeyDown="MainWindow_OnKeyDown"
         >
 
+    <Window.InputBindings>
+        <KeyBinding Key="C" Command="{Binding ClearLinesCommand}"></KeyBinding>
+    </Window.InputBindings>
+    
     <Window.ContextMenu>
         <ContextMenu>
-            <MenuItem Header="About"></MenuItem>
+            <MenuItem Header="Clear Lines" Command="{Binding ClearLinesCommand}"></MenuItem>
+            <!--<MenuItem Header="About"></MenuItem>-->
             <MenuItem Header="Quit" Command="{Binding CloseCommand}"></MenuItem>
         </ContextMenu>
     </Window.ContextMenu>
@@ -34,6 +39,6 @@
             <ruler:BottomRuler DockPanel.Dock="Bottom" Height="15" Background="White" />
         </DockPanel>
         <ruler:BlackBorder Background="Transparent" />
-        <ruler:RedLine Background="Transparent" />
+        <ruler:RedLine x:Name="_redLine" Background="Transparent" />
     </Grid>
 </Window>

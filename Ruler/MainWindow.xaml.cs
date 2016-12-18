@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -7,8 +8,10 @@ namespace MiP.Ruler
     public partial class MainWindow
     {
         private const int BoxSize = 5;
+        private Point _clickPosition;
         private SizingBox _currentSizingBox;
-        private Point _resizeClickPosition;
+
+        private Point _oldWindowPosition;
 
         private bool _resizing;
         private SizingBox[] _sizingBoxes;
@@ -24,18 +27,29 @@ namespace MiP.Ruler
 
         private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            _oldWindowPosition = new Point(Left, Top);
+            _clickPosition = e.GetPosition(this);
+
             if (Cursor == Cursors.Arrow)
+            {
                 DragMove();
+            }
             else
             {
                 CaptureMouse();
                 _resizing = true;
-                _resizeClickPosition = e.GetPosition(this);
             }
         }
 
         private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            var newpos = new Point(Left, Top);
+            if ((newpos == _oldWindowPosition) && !_resizing)
+            {
+                _redLine.AddLine(_clickPosition);
+                return;
+            }
+
             _resizing = false;
 
             ReleaseMouseCapture();
@@ -78,10 +92,12 @@ namespace MiP.Ruler
             };
         }
 
+        public ICommand ClearLinesCommand => new ClearLinesCommand(this);
+
         private void DoResizing(MouseEventArgs e)
         {
             var newPos = e.GetPosition(this);
-            var delta = newPos - _resizeClickPosition;
+            var delta = newPos - _clickPosition;
 
             var left = Left;
             var top = Top;
@@ -105,13 +121,13 @@ namespace MiP.Ruler
             if (_currentSizingBox.SizeRight)
             {
                 width += delta.X;
-                _resizeClickPosition.X = newPos.X;
+                _clickPosition.X = newPos.X;
             }
 
             if (_currentSizingBox.SizeBottom)
             {
                 height += delta.Y;
-                _resizeClickPosition.Y = newPos.Y;
+                _clickPosition.Y = newPos.Y;
             }
 
             if ((left + width > 2*BoxSize) && (left < SystemParameters.PrimaryScreenWidth - BoxSize*2))
@@ -160,7 +176,7 @@ namespace MiP.Ruler
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (Keyboard.Modifiers == ModifierKeys.Alt && e.SystemKey != Key.F4)
+            if ((Keyboard.Modifiers == ModifierKeys.Alt) && (e.SystemKey != Key.F4))
             {
                 e.Handled = true;
                 return;
@@ -192,5 +208,32 @@ namespace MiP.Ruler
             public bool SizeRight;
             public bool SizeTop;
         }
+
+        public void ClearLines()
+        {
+            _redLine.ClearLines();
+        }
+    }
+
+    public class ClearLinesCommand : ICommand
+    {
+        private readonly MainWindow _window;
+
+        public ClearLinesCommand(MainWindow window)
+        {
+            _window = window;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            _window.ClearLines();
+        }
+
+        public event EventHandler CanExecuteChanged;
     }
 }

@@ -1,12 +1,4 @@
-﻿// About Window
-
-// Context Menu
-// - About
-
-// per Links-Click rote Linien "fallenlassen"
-// per Context Menu rote Linien löschen
-
-// per Doppel-Click Vertikal/Horizontal
+﻿// per Doppel-Click Vertikal/Horizontal
 
 // Settings über Context Menü bzw F4
 // - Transparenz (ggf auch über Scrollrad)

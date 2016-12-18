@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,6 +13,9 @@ namespace MiP.Ruler
         private Line _redLine;
         private TextBlock _pixelText;
 
+        private readonly List<Line> _lines = new List<Line>();
+        private readonly List<TextBlock> _pixelTexts = new List<TextBlock>();
+
         public RedLine()
         {
             Initialize();
@@ -22,7 +27,16 @@ namespace MiP.Ruler
         private void RedLine_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             _redLine.Y2 = ActualHeight - 1;
-            SetTop(_pixelText, ActualHeight/2-_pixelText.FontSize/2);
+            SetTop(_pixelText, ActualHeight/2 - _pixelText.FontSize/2);
+
+            foreach (var line in _lines)
+            {
+                line.Y2 = ActualHeight - 1;
+            }
+            foreach (var pixelText in _pixelTexts)
+            {
+                SetTop(pixelText, ActualHeight / 2 - pixelText.FontSize / 2);
+            }
         }
 
         private void Initialize()
@@ -53,13 +67,58 @@ namespace MiP.Ruler
             var pos = e.GetPosition(this);
             _redLine.X1 = _redLine.X2 = pos.X;
 
-            _pixelText.Text = pos.X.ToString("#");
-            _pixelText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            MovePixelText(pos, _pixelText);
+        }
 
-            if (pos.X >= _pixelText.DesiredSize.Width + 4)
-                SetLeft(_pixelText, pos.X - _pixelText.DesiredSize.Width - 2);
+        private void MovePixelText(Point pos, TextBlock pixelText)
+        {
+            pixelText.Text = pos.X.ToString("#");
+            pixelText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+
+            if (pos.X >= pixelText.DesiredSize.Width + 4)
+                SetLeft(pixelText, pos.X - pixelText.DesiredSize.Width - 2);
             else
-                SetLeft(_pixelText, pos.X + 2);
+                SetLeft(pixelText, pos.X + 2);
+        }
+
+        public void AddLine(Point position)
+        {
+            var newLine = new Line
+            {
+                Stroke = Brushes.Crimson,
+                StrokeThickness = 1.0,
+                Y1 = 1,
+                Y2 = ActualHeight - 1,
+                X1 = position.X,
+                X2 = position.X
+            };
+
+            _lines.Add(newLine);
+            Children.Add(newLine);
+
+            // 
+
+            var newText = new TextBlock
+            {
+                Foreground = Brushes.Crimson
+            };
+
+            _pixelTexts.Add(newText);
+            Children.Add(newText);
+
+            MovePixelText(position, newText);
+            SetTop(newText, ActualHeight / 2 - newText.FontSize / 2);
+        }
+
+        public void ClearLines()
+        {
+            foreach (var element in _lines.Cast<UIElement>().Concat(_pixelTexts))
+            {
+                Children.Remove(element);
+            }
+
+            _lines.Clear();
+            _pixelTexts.Clear();
         }
     }
 }

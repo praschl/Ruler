@@ -21,6 +21,11 @@ Press the "c" key to clear the lines.
 
 Alt-F4 to quit.
 
-### For more into
+## Not implemented yet, but planned
 
-[Go to project page](https://praschl.github.com/ruler/)
+Doubleclick for toggling between horizontal / vertical ruler.
+
+Lots of settings
+
+## Download
+Click [Here](https://praschl.github.com/ruler/Yar.zip)

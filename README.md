@@ -1,10 +1,10 @@
-# YAR - Yet Another Ruler
+# Ruler - Yet Another Ruler
 
 ## Purpose
 
 This application creates a Ruler on your screen which you can move around and use it to measure pixels. You can drag it around, size it, display additional lines or change its transparency.
 
-![Image of Ruler with lines](https://praschl.github.io/yar/withLines.png)
+![Image of Ruler with lines](https://praschl.github.io/Ruler/withLines.png)
 
 ## Actions
 
@@ -22,4 +22,4 @@ Press the "c" key to clear the lines.
 Alt-F4 to quit.
 
 ### For more info
-[Go to project pages](https://praschl.github.io/yar/)
+[Go to project pages](https://praschl.github.io/Ruler/)

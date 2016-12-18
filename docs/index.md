@@ -1,10 +1,10 @@
-# YAR - Yet Another Ruler
+# Ruler - Yet Another Ruler
 
 ## Purpose
 
 This application creates a Ruler on your screen which you can move around and use it to measure pixels. You can drag it around, size it, display additional lines or change its transparency.
 
-![Image of Ruler with lines](https://praschl.github.io/ruler/withLines.png)
+![Image of Ruler with lines](https://praschl.github.io/Ruler/withLines.png)
 
 ## Actions
 
@@ -28,4 +28,4 @@ Doubleclick for toggling between horizontal / vertical ruler.
 Lots of settings
 
 ## Download
-Click [Here](https://praschl.github.com/ruler/Yar.zip)
+Click [Here](https://praschl.github.com/Ruler/Ruler.zip)

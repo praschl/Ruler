@@ -65,6 +65,7 @@ namespace MiP.Ruler
         private void RedLine_MouseMove(object sender, MouseEventArgs e)
         {
             var pos = e.GetPosition(this);
+
             _redLine.X1 = _redLine.X2 = pos.X;
 
             MovePixelText(pos, _pixelText);
@@ -72,7 +73,7 @@ namespace MiP.Ruler
 
         private void MovePixelText(Point pos, TextBlock pixelText)
         {
-            pixelText.Text = pos.X.ToString("#");
+            pixelText.Text = pos.X.ToString("0");
             pixelText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
             if (pos.X >= pixelText.DesiredSize.Width + 4)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -12,6 +11,7 @@ namespace MiP.Ruler
         private SizingBox _currentSizingBox;
 
         private Point _oldWindowPosition;
+        private Vector _oldWindowSize;
 
         private bool _resizing;
         private SizingBox[] _sizingBoxes;
@@ -30,6 +30,7 @@ namespace MiP.Ruler
         private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _oldWindowPosition = new Point(Left, Top);
+            _oldWindowSize = new Vector(Width, Height);
             _clickPosition = e.GetPosition(this);
 
             if (Cursor == Cursors.Arrow)
@@ -45,16 +46,16 @@ namespace MiP.Ruler
 
         private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var newpos = new Point(Left, Top);
-            if ((newpos == _oldWindowPosition) && !_resizing)
-            {
-                _redLine.AddLine(_clickPosition);
-                return;
-            }
-
+            ReleaseMouseCapture();
             _resizing = false;
 
-            ReleaseMouseCapture();
+            var newpos = new Point(Left, Top);
+            var newSize = new Vector(Width, Height);
+
+            if ((newpos == _oldWindowPosition) && (_oldWindowSize == newSize))
+            {
+                _redLine.AddLine(_clickPosition);
+            }
         }
 
         private void MainWindow_MouseMove(object sender, MouseEventArgs e)

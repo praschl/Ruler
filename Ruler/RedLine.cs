@@ -43,7 +43,7 @@ namespace MiP.Ruler
         {
             _redLine = new Line
             {
-                Stroke = Brushes.Crimson,
+                Stroke = Brushes.Transparent,
                 StrokeThickness = 1.0,
                 Y1 = 1,
                 Y2 = ActualHeight - 1
@@ -53,7 +53,7 @@ namespace MiP.Ruler
 
             _pixelText = new TextBlock
             {
-                Foreground = Brushes.Crimson
+                Foreground = Brushes.Transparent
             };
 
             SetLeft(_pixelText, 10);
@@ -119,6 +119,18 @@ namespace MiP.Ruler
 
             _lines.Clear();
             _pixelTexts.Clear();
+        }
+
+        public void ShowCurrent()
+        {
+            _redLine.Stroke = Brushes.Crimson;
+            _pixelText.Foreground = Brushes.Crimson;
+        }
+
+        public void HideCurrent()
+        {
+            _redLine.Stroke = Brushes.Transparent;
+            _pixelText.Foreground = Brushes.Transparent;
         }
     }
 }

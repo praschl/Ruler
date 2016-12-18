@@ -1,7 +1,7 @@
 ﻿// per Doppel-Click Vertikal/Horizontal
 
 // Settings über Context Menü bzw F4
-// - Transparenz (ggf auch über Scrollrad)
+// - Transparenz
 // - Hintergrundfarbe
 // - "Rote Linie"-Farbe
 // - "Rote Linie" deaktivieren

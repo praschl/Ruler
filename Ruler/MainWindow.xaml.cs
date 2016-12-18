@@ -25,6 +25,8 @@ namespace MiP.Ruler
 
         public ICommand CloseCommand => new CloseCommand(this);
 
+        public ICommand ClearLinesCommand => new ClearLinesCommand(this);
+
         private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _oldWindowPosition = new Point(Left, Top);
@@ -41,7 +43,7 @@ namespace MiP.Ruler
             }
         }
 
-        private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var newpos = new Point(Left, Top);
             if ((newpos == _oldWindowPosition) && !_resizing)
@@ -55,7 +57,7 @@ namespace MiP.Ruler
             ReleaseMouseCapture();
         }
 
-        private void Window_MouseMove(object sender, MouseEventArgs e)
+        private void MainWindow_MouseMove(object sender, MouseEventArgs e)
         {
             if (!_resizing)
                 CheckSizingBox(e);
@@ -64,9 +66,48 @@ namespace MiP.Ruler
                 DoResizing(e);
         }
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void MainWindow_OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            double delta = e.Delta > 0 ? 0.1 : -0.1;
+
+            var newOpacity = Opacity + delta;
+
+            if (newOpacity > 1.0)
+                newOpacity = 1.0;
+            if (newOpacity < 0.1)
+                newOpacity = 0.1;
+
+            Opacity = newOpacity;
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateSizingBoxes();
+        }
+
+        private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if ((Keyboard.Modifiers == ModifierKeys.Alt) && (e.SystemKey != Key.F4))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            // easier to implement than with a huge load of different key bindings
+            var pixel = 1;
+            if (Keyboard.IsKeyDown(Key.LeftShift) | Keyboard.IsKeyDown(Key.RightShift))
+                pixel = 5;
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) | Keyboard.IsKeyDown(Key.RightCtrl))
+                pixel = 25;
+
+            if (e.Key == Key.Left)
+                Left -= pixel;
+            if (e.Key == Key.Right)
+                Left += pixel;
+            if (e.Key == Key.Up)
+                Top -= pixel;
+            if (e.Key == Key.Down)
+                Top += pixel;
         }
 
         private void InitializeSizingBoxes()
@@ -91,8 +132,6 @@ namespace MiP.Ruler
                 new SizingBox {Rect = new Rect(0, BoxSize, BoxSize, h2bs), Cursor = Cursors.SizeWE, SizeLeft = true}
             };
         }
-
-        public ICommand ClearLinesCommand => new ClearLinesCommand(this);
 
         private void DoResizing(MouseEventArgs e)
         {
@@ -174,29 +213,9 @@ namespace MiP.Ruler
             _sizingBoxes[8].Rect.Height = h2bs;
         }
 
-        private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
+        public void ClearLines()
         {
-            if ((Keyboard.Modifiers == ModifierKeys.Alt) && (e.SystemKey != Key.F4))
-            {
-                e.Handled = true;
-                return;
-            }
-
-            // easier to implement than with a huge load of different key bindings
-            var pixel = 1;
-            if (Keyboard.IsKeyDown(Key.LeftShift) | Keyboard.IsKeyDown(Key.RightShift))
-                pixel = 5;
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) | Keyboard.IsKeyDown(Key.RightCtrl))
-                pixel = 25;
-
-            if (e.Key == Key.Left)
-                Left -= pixel;
-            if (e.Key == Key.Right)
-                Left += pixel;
-            if (e.Key == Key.Up)
-                Top -= pixel;
-            if (e.Key == Key.Down)
-                Top += pixel;
+            _redLine.ClearLines();
         }
 
         private class SizingBox
@@ -209,31 +228,14 @@ namespace MiP.Ruler
             public bool SizeTop;
         }
 
-        public void ClearLines()
+        private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
         {
-            _redLine.ClearLines();
-        }
-    }
-
-    public class ClearLinesCommand : ICommand
-    {
-        private readonly MainWindow _window;
-
-        public ClearLinesCommand(MainWindow window)
-        {
-            _window = window;
+            _redLine.ShowCurrent();
         }
 
-        public bool CanExecute(object parameter)
+        private void MainWindow_OnMouseLeave(object sender, MouseEventArgs e)
         {
-            return true;
+            _redLine.HideCurrent();
         }
-
-        public void Execute(object parameter)
-        {
-            _window.ClearLines();
-        }
-
-        public event EventHandler CanExecuteChanged;
     }
 }

@@ -1,6 +1,4 @@
-﻿// per Doppel-Click Vertikal/Horizontal
-
-// Settings über Context Menü bzw F4
+﻿// Settings über Context Menü bzw F4
 // - Transparenz
 // - Hintergrundfarbe
 // - "Rote Linie"-Farbe
@@ -9,7 +7,6 @@
 
 // Settings (auch Größe + Position) beim Beenden speichern
 
-// Icons: File, Window
-// Taskbar Icon + Hotkey
+// Systray Icon + Hotkey
 
 // besseren Resizing Code

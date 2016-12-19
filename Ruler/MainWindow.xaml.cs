@@ -1,14 +1,19 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using MiP.Ruler.Annotations;
 
 namespace MiP.Ruler
 {
-    public partial class MainWindow
+    public partial class MainWindow : INotifyPropertyChanged
     {
         private const int BoxSize = 5;
         private Point _clickPosition;
         private SizingBox _currentSizingBox;
+
+        private bool _doubleClicked;
 
         private Point _oldWindowPosition;
         private Vector _oldWindowSize;
@@ -23,9 +28,13 @@ namespace MiP.Ruler
             InitializeSizingBoxes();
         }
 
+        public bool IsHorizontal => Width > Height;
+
         public ICommand CloseCommand => new CloseCommand(this);
 
         public ICommand ClearLinesCommand => new ClearLinesCommand(this);
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -52,9 +61,13 @@ namespace MiP.Ruler
             var newpos = new Point(Left, Top);
             var newSize = new Vector(Width, Height);
 
-            if ((newpos == _oldWindowPosition) && (_oldWindowSize == newSize))
-            {
+            if ((newpos == _oldWindowPosition) && (_oldWindowSize == newSize) && !_doubleClicked)
                 _redLine.AddLine(_clickPosition);
+
+            if (_doubleClicked)
+            {
+                _doubleClicked = false;
+                _redLine.ClearLines();
             }
         }
 
@@ -69,7 +82,7 @@ namespace MiP.Ruler
 
         private void MainWindow_OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            double delta = e.Delta > 0 ? 0.1 : -0.1;
+            var delta = e.Delta > 0 ? 0.1 : -0.1;
 
             var newOpacity = Opacity + delta;
 
@@ -84,6 +97,7 @@ namespace MiP.Ruler
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateSizingBoxes();
+            OnPropertyChanged(nameof(IsHorizontal));
         }
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
@@ -109,6 +123,33 @@ namespace MiP.Ruler
                 Top -= pixel;
             if (e.Key == Key.Down)
                 Top += pixel;
+        }
+
+        private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            _redLine.ShowCurrent();
+        }
+
+        private void MainWindow_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            _redLine.HideCurrent();
+        }
+
+        private void MainWindow_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var pos = e.GetPosition(this);
+
+            var left = Left + pos.X - pos.Y;
+            var top = Top + pos.Y - pos.X;
+            var width = Height;
+            var height = Width;
+
+            Left = left;
+            Top = top;
+            Width = width;
+            Height = height;
+
+            _doubleClicked = true;
         }
 
         private void InitializeSizingBoxes()
@@ -219,6 +260,12 @@ namespace MiP.Ruler
             _redLine.ClearLines();
         }
 
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private class SizingBox
         {
             public Cursor Cursor;
@@ -227,16 +274,6 @@ namespace MiP.Ruler
             public bool SizeLeft;
             public bool SizeRight;
             public bool SizeTop;
-        }
-
-        private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            _redLine.ShowCurrent();
-        }
-
-        private void MainWindow_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            _redLine.HideCurrent();
         }
     }
 }

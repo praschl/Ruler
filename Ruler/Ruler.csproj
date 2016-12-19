@@ -34,6 +34,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -55,10 +59,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BlackBorder.cs" />
+    <Compile Include="BooleanToVisibilityConverter.cs" />
     <Compile Include="BottomRuler.cs" />
     <Compile Include="ClearLinesCommand.cs" />
     <Compile Include="CloseCommand.cs" />
+    <Compile Include="LeftRuler.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RedLine.cs" />
+    <Compile Include="RightRuler.cs" />
     <Compile Include="TODO.cs" />
     <Compile Include="TopRuler.cs" />
     <Page Include="MainWindow.xaml">
@@ -99,6 +107,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+    <Resource Include="icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,17 +11,21 @@
         SnapsToDevicePixels="True"
         MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
         MouseLeftButtonUp="MainWindow_MouseLeftButtonUp"
+        MouseDoubleClick="MainWindow_OnMouseDoubleClick"
         MouseWheel="MainWindow_OnMouseWheel"
         MouseMove="MainWindow_MouseMove"
         MouseEnter="MainWindow_OnMouseEnter"
         MouseLeave="MainWindow_OnMouseLeave"
         SizeChanged="MainWindow_SizeChanged"
         ResizeMode="NoResize"
-        Title="MainWindow"
-        Width="525" Height="50" MinWidth="100" MinHeight="75"
+        Title="Ruler"
+        Width="600" Height="75" MinWidth="75" MinHeight="75"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         KeyDown="MainWindow_OnKeyDown"
         >
+    <Window.Resources>
+        <ruler:BooleanToVisibilityConverter x:Key="_booleanToVisibilityConverter"></ruler:BooleanToVisibilityConverter>
+    </Window.Resources>
 
     <Window.InputBindings>
         <KeyBinding Key="C" Command="{Binding ClearLinesCommand}"></KeyBinding>
@@ -38,8 +42,12 @@
     <Grid Opacity="0.9">
         <Canvas Background="White" />
         <DockPanel LastChildFill="False">
-            <ruler:TopRuler DockPanel.Dock="Top" Height="30" Background="White" />
-            <ruler:BottomRuler DockPanel.Dock="Bottom" Height="15" Background="White" />
+            <ruler:TopRuler DockPanel.Dock="Top" Height="30" Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='true'}" />
+            <ruler:BottomRuler DockPanel.Dock="Bottom" Height="15" Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='true'}" />
+        </DockPanel>
+        <DockPanel LastChildFill="False">
+            <ruler:LeftRuler DockPanel.Dock="Left" Width="30" Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='false'}" />
+            <ruler:RightRuler DockPanel.Dock="Right" Width="30" Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='false'}" />
         </DockPanel>
         <ruler:BlackBorder Background="Transparent" />
         <ruler:RedLine x:Name="_redLine" Background="Transparent" />

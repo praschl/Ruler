@@ -10,11 +10,10 @@ namespace MiP.Ruler
 {
     public class RedLine : Canvas
     {
-        private Line _redLine;
-        private TextBlock _pixelText;
-
         private readonly List<Line> _lines = new List<Line>();
         private readonly List<TextBlock> _pixelTexts = new List<TextBlock>();
+        private TextBlock _pixelText;
+        private Line _redLine;
 
         public RedLine()
         {
@@ -30,13 +29,9 @@ namespace MiP.Ruler
             SetTop(_pixelText, ActualHeight/2 - _pixelText.FontSize/2);
 
             foreach (var line in _lines)
-            {
                 line.Y2 = ActualHeight - 1;
-            }
             foreach (var pixelText in _pixelTexts)
-            {
-                SetTop(pixelText, ActualHeight / 2 - pixelText.FontSize / 2);
-            }
+                SetTop(pixelText, ActualHeight/2 - pixelText.FontSize/2);
         }
 
         private void Initialize()
@@ -108,15 +103,13 @@ namespace MiP.Ruler
             Children.Add(newText);
 
             MovePixelText(position, newText);
-            SetTop(newText, ActualHeight / 2 - newText.FontSize / 2);
+            SetTop(newText, ActualHeight/2 - newText.FontSize/2);
         }
 
         public void ClearLines()
         {
             foreach (var element in _lines.Cast<UIElement>().Concat(_pixelTexts))
-            {
                 Children.Remove(element);
-            }
 
             _lines.Clear();
             _pixelTexts.Clear();

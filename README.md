@@ -15,7 +15,7 @@ Clicking the Window adds a marker line at the mouse Position.
 
 Right click for context menu.
 
-Mousewheen to change transparency.
+Mousewheel to change transparency.
 
 Press the "c" key to clear the lines.
 

@@ -1,15 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using MiP.Ruler.Annotations;
 
 namespace MiP.Ruler
 {
-    public class RedLine : Canvas
+    public class RedLine : Canvas, INotifyPropertyChanged
     {
+        public static readonly DependencyProperty HorizontalProperty = DependencyProperty.Register(
+            "Horizontal", typeof(bool), typeof(RedLine), new PropertyMetadata(true, (o, args) => { ((RedLine) o)?.DirectionChanged((bool) args.NewValue); }));
+
         private readonly List<Line> _lines = new List<Line>();
         private readonly List<TextBlock> _pixelTexts = new List<TextBlock>();
         private TextBlock _pixelText;
@@ -23,16 +29,13 @@ namespace MiP.Ruler
             SizeChanged += RedLine_SizeChanged;
         }
 
-        private void RedLine_SizeChanged(object sender, SizeChangedEventArgs e)
+        public bool Horizontal
         {
-            _redLine.Y2 = ActualHeight - 1;
-            SetTop(_pixelText, ActualHeight/2 - _pixelText.FontSize/2);
-
-            foreach (var line in _lines)
-                line.Y2 = ActualHeight - 1;
-            foreach (var pixelText in _pixelTexts)
-                SetTop(pixelText, ActualHeight/2 - pixelText.FontSize/2);
+            get { return (bool) GetValue(HorizontalProperty); }
+            set { SetValue(HorizontalProperty, value); }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void Initialize()
         {
@@ -55,6 +58,17 @@ namespace MiP.Ruler
             SetTop(_pixelText, 10);
 
             Children.Add(_pixelText);
+        }
+
+        private void RedLine_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            _redLine.Y2 = ActualHeight - 1;
+            SetTop(_pixelText, ActualHeight/2 - _pixelText.FontSize/2);
+
+            foreach (var line in _lines)
+                line.Y2 = ActualHeight - 1;
+            foreach (var pixelText in _pixelTexts)
+                SetTop(pixelText, ActualHeight/2 - pixelText.FontSize/2);
         }
 
         private void RedLine_MouseMove(object sender, MouseEventArgs e)
@@ -125,6 +139,18 @@ namespace MiP.Ruler
         {
             _redLine.Stroke = Brushes.Transparent;
             _pixelText.Foreground = Brushes.Transparent;
+        }
+
+        private void DirectionChanged(bool isHorizontal)
+        {
+            // TODO: recalculate current line and text
+            // TODO: also change reacting on RedLine_SizeChanged RedLine_MouseMove MovePixelText AddLine
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

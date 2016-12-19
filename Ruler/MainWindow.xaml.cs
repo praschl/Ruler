@@ -20,6 +20,7 @@ namespace MiP.Ruler
 
         private bool _resizing;
         private SizingBox[] _sizingBoxes;
+        private bool _isHorizontal;
 
         public MainWindow()
         {
@@ -28,7 +29,16 @@ namespace MiP.Ruler
             InitializeSizingBoxes();
         }
 
-        public bool IsHorizontal => Width > Height;
+        public bool IsHorizontal
+        {
+            get { return _isHorizontal; }
+            set
+            {
+                if (value == _isHorizontal) return;
+                _isHorizontal = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ICommand CloseCommand => new CloseCommand(this);
 
@@ -50,13 +60,19 @@ namespace MiP.Ruler
             {
                 CaptureMouse();
                 _resizing = true;
+                _redLine.HideCurrent();
             }
         }
 
         private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ReleaseMouseCapture();
-            _resizing = false;
+
+            if (_resizing)
+            {
+                _resizing = false;
+                _redLine.ShowCurrent();
+            }
 
             var newpos = new Point(Left, Top);
             var newSize = new Vector(Width, Height);
@@ -97,7 +113,7 @@ namespace MiP.Ruler
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateSizingBoxes();
-            OnPropertyChanged(nameof(IsHorizontal));
+            IsHorizontal = Width > Height;
         }
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)

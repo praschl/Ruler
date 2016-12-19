@@ -39,7 +39,7 @@
         </ContextMenu>
     </Window.ContextMenu>
     
-    <Grid Opacity="0.9">
+    <Grid>
         <Canvas Background="White" />
         <DockPanel LastChildFill="False">
             <ruler:TopRuler DockPanel.Dock="Top" Height="30" Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='true'}" />
@@ -49,7 +49,7 @@
             <ruler:LeftRuler DockPanel.Dock="Left" Width="30" Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='false'}" />
             <ruler:RightRuler DockPanel.Dock="Right" Width="30" Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='false'}" />
         </DockPanel>
-        <ruler:BlackBorder Background="Transparent" />
-        <ruler:RedLine x:Name="_redLine" Background="Transparent" />
+        <ruler:BlackBorder />
+        <ruler:RedLine x:Name="_redLine" Horizontal="{Binding IsHorizontal}" />
     </Grid>
 </Window>

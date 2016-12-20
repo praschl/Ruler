@@ -15,11 +15,20 @@ Clicking the Window adds a marker line at the mouse Position.
 
 Right click for context menu.
 
-Mousewheen to change transparency.
+Mousewheel to change transparency.
 
-Press the "c" key to clear the lines.
+## Keyboard
+
+C to clear the lines.
+D to switch between horizontal and vertical
 
 Alt-F4 to quit.
 
-### For more info
-[Go to project pages](https://praschl.github.io/Ruler/)
+## Not implemented yet, but planned
+
+Doubleclick for toggling between horizontal / vertical ruler.
+
+Lots of settings
+
+## Download
+Download [Ruler v0.2](https://praschl.github.com/Ruler/Ruler.zip)

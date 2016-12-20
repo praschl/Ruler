@@ -67,6 +67,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RedLine.cs" />
     <Compile Include="RightRuler.cs" />
+    <Compile Include="SwitchDirectionCommand.cs" />
     <Compile Include="TODO.cs" />
     <Compile Include="TopRuler.cs" />
     <Page Include="MainWindow.xaml">

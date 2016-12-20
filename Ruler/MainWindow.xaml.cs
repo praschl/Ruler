@@ -21,6 +21,7 @@ namespace MiP.Ruler
         private bool _resizing;
         private SizingBox[] _sizingBoxes;
         private bool _isHorizontal;
+        private string _switchDirectionText;
 
         public MainWindow()
         {
@@ -37,12 +38,27 @@ namespace MiP.Ruler
                 if (value == _isHorizontal) return;
                 _isHorizontal = value;
                 OnPropertyChanged();
+
+                SwitchDirectionText = _isHorizontal ? "Switch to vertical" : "Switch to horizontal";
             }
         }
 
         public ICommand CloseCommand => new CloseCommand(this);
 
         public ICommand ClearLinesCommand => new ClearLinesCommand(this);
+
+        public ICommand SwitchDirectionCommand => new SwitchDirectionCommand(this);
+
+        public string SwitchDirectionText
+        {
+            get { return _switchDirectionText; }
+            set
+            {
+                if (value == _switchDirectionText) return;
+                _switchDirectionText = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -68,11 +84,8 @@ namespace MiP.Ruler
         {
             ReleaseMouseCapture();
 
-            if (_resizing)
-            {
-                _resizing = false;
-                _redLine.ShowCurrent();
-            }
+            _resizing = false;
+            _redLine.ShowCurrent();
 
             var newpos = new Point(Left, Top);
             var newSize = new Vector(Width, Height);
@@ -153,8 +166,16 @@ namespace MiP.Ruler
 
         private void MainWindow_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            _redLine.ClearLines();
+            _redLine.HideCurrent();
+
             var pos = e.GetPosition(this);
 
+            SwitchDirection(pos, true);
+        }
+
+        public void SwitchDirection(Point pos, bool isDoubleClick)
+        {
             var left = Left + pos.X - pos.Y;
             var top = Top + pos.Y - pos.X;
             var width = Height;
@@ -165,7 +186,7 @@ namespace MiP.Ruler
             Width = width;
             Height = height;
 
-            _doubleClicked = true;
+            _doubleClicked = isDoubleClick;
         }
 
         private void InitializeSizingBoxes()
@@ -241,10 +262,8 @@ namespace MiP.Ruler
         {
             var pos = e.GetPosition(this);
 
-            _currentSizingBox = _sizingBoxes.FirstOrDefault(b => b.Rect.Contains(pos));
+            _currentSizingBox = _sizingBoxes.FirstOrDefault(b => b.Rect.Contains(pos)) ?? _sizingBoxes[0];
 
-            if (_currentSizingBox == null)
-                return;
             Cursor = _currentSizingBox.Cursor;
         }
 

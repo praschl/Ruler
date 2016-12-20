@@ -26,9 +26,14 @@ Alt-F4 to quit.
 
 ## Not implemented yet, but planned
 
-Doubleclick for toggling between horizontal / vertical ruler.
-
 Lots of settings
 
 ## Download
+
 Download [Ruler v0.2](https://praschl.github.com/Ruler/Ruler.zip)
+
+Some Virus Scanners currently seem to detect the "HEUR/QVM03.0.0000.Malware.Gen" on the executable in the zip file. However, http://stackoverflow.com/questions/33998715/visual-studio-2015-community-trojan-heur-qvm03-0-malware-gen states, that this scanner just flags even the most simple windows forms applications with this malware, all being false positives.
+
+Also, Google Chrome identifies it as "suspicious download".
+
+If you are afraid of viruses, you are free to review and compile the source yourself. In the meantime I'll look into how the false positive can be avoided.

@@ -9,16 +9,16 @@ namespace MiP.Ruler
 {
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private const int BoxSize = 5;
-        private Point _clickPosition;
-        private SizingBox _currentSizingBox;
+        private Point _lastClickPosition;
+        private bool _statusDoubleClicked;
+        private bool _statusResizing;
 
-        private bool _doubleClicked;
+        private const int ResizingBoxSize = 5;
+        private SizingBox _currentResizingBox;
 
         private Point _oldWindowPosition;
         private Vector _oldWindowSize;
 
-        private bool _resizing;
         private SizingBox[] _sizingBoxes;
         private bool _isHorizontal;
         private string _switchDirectionText;
@@ -29,6 +29,12 @@ namespace MiP.Ruler
 
             InitializeSizingBoxes();
         }
+        
+        public ICommand CloseCommand => new CloseCommand(this);
+
+        public ICommand ClearRulerLinesCommand => new ClearRulerLinesCommand(this);
+
+        public ICommand SwitchDirectionCommand => new SwitchDirectionCommand(this);
 
         public bool IsHorizontal
         {
@@ -42,12 +48,6 @@ namespace MiP.Ruler
                 SwitchDirectionText = _isHorizontal ? "Switch to vertical" : "Switch to horizontal";
             }
         }
-
-        public ICommand CloseCommand => new CloseCommand(this);
-
-        public ICommand ClearLinesCommand => new ClearLinesCommand(this);
-
-        public ICommand SwitchDirectionCommand => new SwitchDirectionCommand(this);
 
         public string SwitchDirectionText
         {
@@ -66,7 +66,7 @@ namespace MiP.Ruler
         {
             _oldWindowPosition = new Point(Left, Top);
             _oldWindowSize = new Vector(Width, Height);
-            _clickPosition = e.GetPosition(this);
+            _lastClickPosition = e.GetPosition(this);
 
             if (Cursor == Cursors.Arrow)
             {
@@ -75,8 +75,8 @@ namespace MiP.Ruler
             else
             {
                 CaptureMouse();
-                _resizing = true;
-                _redLine.SetCurrentVisible(false);
+                _statusResizing = true;
+                _rulerLineDisplay.SetCurrentVisible(false);
             }
         }
 
@@ -84,24 +84,24 @@ namespace MiP.Ruler
         {
             ReleaseMouseCapture();
 
-            _resizing = false;
-            _redLine.SetCurrentVisible(true);
+            _statusResizing = false;
+            _rulerLineDisplay.SetCurrentVisible(true);
 
             var newpos = new Point(Left, Top);
             var newSize = new Vector(Width, Height);
 
-            if ((newpos == _oldWindowPosition) && (_oldWindowSize == newSize) && !_doubleClicked)
-                _redLine.AddNewRulerLine(_clickPosition);
+            if ((newpos == _oldWindowPosition) && (_oldWindowSize == newSize) && !_statusDoubleClicked)
+                _rulerLineDisplay.AddNewRulerLine(_lastClickPosition);
 
-            _doubleClicked = false;
+            _statusDoubleClicked = false;
         }
 
         private void MainWindow_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!_resizing)
+            if (!_statusResizing)
                 CheckSizingBox(e);
 
-            if (_resizing)
+            if (_statusResizing)
                 DoResizing(e);
         }
 
@@ -152,12 +152,12 @@ namespace MiP.Ruler
 
         private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
         {
-            _redLine.SetCurrentVisible(true);
+            _rulerLineDisplay.SetCurrentVisible(true);
         }
 
         private void MainWindow_OnMouseLeave(object sender, MouseEventArgs e)
         {
-            _redLine.SetCurrentVisible(false);
+            _rulerLineDisplay.SetCurrentVisible(false);
         }
 
         private void MainWindow_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -179,71 +179,71 @@ namespace MiP.Ruler
             Width = width;
             Height = height;
 
-            _doubleClicked = isDoubleClick;
+            _statusDoubleClicked = isDoubleClick;
         }
 
         private void InitializeSizingBoxes()
         {
             // ReSharper disable InconsistentNaming
-            var w2bs = Width - 2*BoxSize;
-            var h2bs = Height - 2*BoxSize;
+            var w2bs = Width - 2*ResizingBoxSize;
+            var h2bs = Height - 2*ResizingBoxSize;
             // ReSharper restore InconsistentNaming
-            var wr = Width - BoxSize;
-            var hb = Height - BoxSize;
+            var wr = Width - ResizingBoxSize;
+            var hb = Height - ResizingBoxSize;
 
             _sizingBoxes = new[]
             {
-                new SizingBox {Rect = new Rect(BoxSize, BoxSize, w2bs, h2bs), Cursor = Cursors.Arrow}, // center
-                new SizingBox {Rect = new Rect(0, 0, BoxSize, BoxSize), Cursor = Cursors.SizeNWSE, SizeLeft = true, SizeTop = true},
-                new SizingBox {Rect = new Rect(BoxSize, 0, w2bs, BoxSize), Cursor = Cursors.SizeNS, SizeTop = true},
-                new SizingBox {Rect = new Rect(wr, 0, BoxSize, BoxSize), Cursor = Cursors.SizeNESW, SizeRight = true, SizeTop = true},
-                new SizingBox {Rect = new Rect(wr, BoxSize, BoxSize, h2bs), Cursor = Cursors.SizeWE, SizeRight = true},
-                new SizingBox {Rect = new Rect(wr, hb, BoxSize, BoxSize), Cursor = Cursors.SizeNWSE, SizeRight = true, SizeBottom = true},
-                new SizingBox {Rect = new Rect(BoxSize, hb, w2bs, BoxSize), Cursor = Cursors.SizeNS, SizeBottom = true},
-                new SizingBox {Rect = new Rect(0, hb, BoxSize, BoxSize), Cursor = Cursors.SizeNESW, SizeLeft = true, SizeBottom = true},
-                new SizingBox {Rect = new Rect(0, BoxSize, BoxSize, h2bs), Cursor = Cursors.SizeWE, SizeLeft = true}
+                new SizingBox {Rect = new Rect(ResizingBoxSize, ResizingBoxSize, w2bs, h2bs), Cursor = Cursors.Arrow}, // center
+                new SizingBox {Rect = new Rect(0, 0, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNWSE, SizeLeft = true, SizeTop = true},
+                new SizingBox {Rect = new Rect(ResizingBoxSize, 0, w2bs, ResizingBoxSize), Cursor = Cursors.SizeNS, SizeTop = true},
+                new SizingBox {Rect = new Rect(wr, 0, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNESW, SizeRight = true, SizeTop = true},
+                new SizingBox {Rect = new Rect(wr, ResizingBoxSize, ResizingBoxSize, h2bs), Cursor = Cursors.SizeWE, SizeRight = true},
+                new SizingBox {Rect = new Rect(wr, hb, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNWSE, SizeRight = true, SizeBottom = true},
+                new SizingBox {Rect = new Rect(ResizingBoxSize, hb, w2bs, ResizingBoxSize), Cursor = Cursors.SizeNS, SizeBottom = true},
+                new SizingBox {Rect = new Rect(0, hb, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNESW, SizeLeft = true, SizeBottom = true},
+                new SizingBox {Rect = new Rect(0, ResizingBoxSize, ResizingBoxSize, h2bs), Cursor = Cursors.SizeWE, SizeLeft = true}
             };
         }
 
         private void DoResizing(MouseEventArgs e)
         {
             var newPos = e.GetPosition(this);
-            var delta = newPos - _clickPosition;
+            var delta = newPos - _lastClickPosition;
 
             var left = Left;
             var top = Top;
             var width = Width;
             var height = Height;
 
-            if (_currentSizingBox.SizeLeft)
+            if (_currentResizingBox.SizeLeft)
             {
                 width -= delta.X;
                 if (width > MinWidth)
                     left += delta.X;
             }
 
-            if (_currentSizingBox.SizeTop)
+            if (_currentResizingBox.SizeTop)
             {
                 height -= delta.Y;
                 if (height > MinHeight)
                     top += delta.Y;
             }
 
-            if (_currentSizingBox.SizeRight)
+            if (_currentResizingBox.SizeRight)
             {
                 width += delta.X;
-                _clickPosition.X = newPos.X;
+                _lastClickPosition.X = newPos.X;
             }
 
-            if (_currentSizingBox.SizeBottom)
+            if (_currentResizingBox.SizeBottom)
             {
                 height += delta.Y;
-                _clickPosition.Y = newPos.Y;
+                _lastClickPosition.Y = newPos.Y;
             }
 
-            if ((left + width > 2*BoxSize) && (left < SystemParameters.PrimaryScreenWidth - BoxSize*2))
+            if ((left + width > 2*ResizingBoxSize) && (left < SystemParameters.PrimaryScreenWidth - ResizingBoxSize*2))
                 Left = left;
-            if ((top + height > 2*BoxSize) && (top < SystemParameters.PrimaryScreenHeight - BoxSize*2))
+            if ((top + height > 2*ResizingBoxSize) && (top < SystemParameters.PrimaryScreenHeight - ResizingBoxSize*2))
                 Top = top;
             if ((width > MinWidth) && (width < MaxWidth))
                 Width = width;
@@ -255,19 +255,19 @@ namespace MiP.Ruler
         {
             var pos = e.GetPosition(this);
 
-            _currentSizingBox = _sizingBoxes.FirstOrDefault(b => b.Rect.Contains(pos)) ?? _sizingBoxes[0];
+            _currentResizingBox = _sizingBoxes.FirstOrDefault(b => b.Rect.Contains(pos)) ?? _sizingBoxes[0];
 
-            Cursor = _currentSizingBox.Cursor;
+            Cursor = _currentResizingBox.Cursor;
         }
 
         private void RecalculateSizingBoxes()
         {
             // ReSharper disable InconsistentNaming
-            var w2bs = Width - 2*BoxSize;
-            var h2bs = Height - 2*BoxSize;
+            var w2bs = Width - 2*ResizingBoxSize;
+            var h2bs = Height - 2*ResizingBoxSize;
             // ReSharper restore InconsistentNaming
-            var wr = Width - BoxSize;
-            var hb = Height - BoxSize;
+            var wr = Width - ResizingBoxSize;
+            var hb = Height - ResizingBoxSize;
 
             _sizingBoxes[0].Rect.Width = w2bs;
             _sizingBoxes[0].Rect.Height = h2bs;
@@ -285,7 +285,7 @@ namespace MiP.Ruler
 
         public void ClearLines()
         {
-            _redLine.ClearRulerLines();
+            _rulerLineDisplay.ClearRulerLines();
         }
 
         [NotifyPropertyChangedInvocator]

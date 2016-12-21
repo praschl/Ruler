@@ -57,18 +57,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BlackBorder.cs" />
+    <Compile Include="RulerBorder.cs" />
     <Compile Include="BooleanToVisibilityConverter.cs" />
-    <Compile Include="BottomRuler.cs" />
-    <Compile Include="ClearLinesCommand.cs" />
+    <Compile Include="ClearRulerLinesCommand.cs" />
     <Compile Include="CloseCommand.cs" />
-    <Compile Include="LeftRuler.cs" />
+    <Compile Include="RulerTicksDisplay.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RulerLineDisplay.cs" />
-    <Compile Include="RightRuler.cs" />
     <Compile Include="SwitchDirectionCommand.cs" />
     <Compile Include="TODO.cs" />
-    <Compile Include="TopRuler.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -30,14 +30,14 @@
     </Window.Resources>
 
     <Window.InputBindings>
-        <KeyBinding Key="C" Command="{Binding ClearLinesCommand}" />
+        <KeyBinding Key="C" Command="{Binding ClearRulerLinesCommand}" />
         <KeyBinding Key="D" Command="{Binding SwitchDirectionCommand}" />
     </Window.InputBindings>
 
     <Window.ContextMenu>
         <ContextMenu>
             <MenuItem Header="{Binding SwitchDirectionText}" Command="{Binding SwitchDirectionCommand}" />
-            <MenuItem Header="Clear Lines" Command="{Binding ClearLinesCommand}" />
+            <MenuItem Header="Clear Lines" Command="{Binding ClearRulerLinesCommand}" />
             <Separator />
             <!--<MenuItem Header="About"></MenuItem>-->
             <MenuItem Header="Quit" Command="{Binding CloseCommand}" />
@@ -47,18 +47,18 @@
     <Grid>
         <Canvas Background="White" />
         <DockPanel LastChildFill="False">
-            <ruler:TopRuler DockPanel.Dock="Top" Height="30"
+            <ruler:RulerTicksDisplay RulerPosition="Top" DockPanel.Dock="Top" Height="30"
                             Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='true'}" />
-            <ruler:BottomRuler DockPanel.Dock="Bottom" Height="15"
+            <ruler:RulerTicksDisplay RulerPosition="Bottom" DockPanel.Dock="Bottom" Height="15"
                                Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='true'}" />
         </DockPanel>
         <DockPanel LastChildFill="False">
-            <ruler:LeftRuler DockPanel.Dock="Left" Width="30"
+            <ruler:RulerTicksDisplay RulerPosition="Left" DockPanel.Dock="Left" Width="30"
                              Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='false'}" />
-            <ruler:RightRuler DockPanel.Dock="Right" Width="30"
+            <ruler:RulerTicksDisplay RulerPosition="Right" DockPanel.Dock="Right" Width="30"
                               Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='false'}" />
         </DockPanel>
-        <ruler:BlackBorder />
-        <ruler:RulerLineDisplay x:Name="_redLine" Background="Transparent" IsHorizontal="{Binding IsHorizontal}" />
+        <ruler:RulerBorder />
+        <ruler:RulerLineDisplay x:Name="_rulerLineDisplay" Background="Transparent" IsHorizontal="{Binding IsHorizontal}" />
     </Grid>
 </Window>

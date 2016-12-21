@@ -3,11 +3,11 @@ using System.Windows.Input;
 
 namespace MiP.Ruler
 {
-    public class ClearLinesCommand : ICommand
+    public class ClearRulerLinesCommand : ICommand
     {
         private readonly MainWindow _window;
 
-        public ClearLinesCommand(MainWindow window)
+        public ClearRulerLinesCommand(MainWindow window)
         {
             _window = window;
         }

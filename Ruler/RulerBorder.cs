@@ -5,11 +5,12 @@ using System.Windows.Shapes;
 
 namespace MiP.Ruler
 {
-    public class BlackBorder : Canvas
+    public class RulerBorder : Canvas
     {
+        // this is implemented as canvas instead of deriving from Border, to allow clicks go to the window.
         private Rectangle _border;
 
-        public BlackBorder()
+        public RulerBorder()
         {
             Initialize();
 

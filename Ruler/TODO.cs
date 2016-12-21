@@ -4,6 +4,8 @@
 
 // Keep lines when switching
 
+// Let user drag origin from (0,0) 
+
 // Settings über Context Menü bzw F4
 // - Transparenz
 // - Hintergrundfarbe

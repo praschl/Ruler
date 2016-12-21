@@ -9,6 +9,11 @@ using MiP.Ruler.Commands;
 
 namespace MiP.Ruler
 {
+    // Yup, some parts here are event handlers, and some are commands.
+    // I've used what worked better and simpler for each use case.
+    // Many things like mouseevents cant be expressed as commands properly, 
+    // and some other work better as commands like Keybindings.
+
     public partial class MainWindow : INotifyPropertyChanged
     {
         private const int ResizingBoxSize = 5;
@@ -23,6 +28,7 @@ namespace MiP.Ruler
         private bool _statusDoubleClicked;
         private bool _statusResizing;
         private string _switchDirectionText;
+        private Orientation _orientation;
 
         public MainWindow()
         {
@@ -49,6 +55,19 @@ namespace MiP.Ruler
                 OnPropertyChanged();
 
                 SwitchDirectionText = _isHorizontal ? "Switch to vertical" : "Switch to horizontal";
+            }
+        }
+
+        public Orientation Orientation
+        {
+            get { return _orientation; }
+            set
+            {
+                if (value == _orientation) return;
+                _orientation = value;
+                OnPropertyChanged();
+
+                SwitchDirectionText = _orientation == Orientation.Horizontal ? "Switch to horizontal" : "Switch to vertical";
             }
         }
 
@@ -126,6 +145,7 @@ namespace MiP.Ruler
         {
             RecalculateSizingBoxes();
             IsHorizontal = Width > Height;
+            Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
         }
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)

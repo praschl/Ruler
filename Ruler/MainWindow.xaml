@@ -23,11 +23,12 @@
         Width="601" Height="75" MinWidth="75" MinHeight="75"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         KeyDown="MainWindow_OnKeyDown"
-        Icon="assets/icon.ico"
-        >
-    
+        Icon="assets/icon.ico">
+
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="_booleanToVisibilityConverter" />
+        <converters:OrientationToVisibilityConverter x:Key="_horizontalVisibilityConverter" Orientation="Horizontal" />
+        <converters:OrientationToVisibilityConverter x:Key="_verticalVisibilityConverter" Orientation="Vertical" />
     </Window.Resources>
 
     <Window.InputBindings>
@@ -51,17 +52,18 @@
         <Canvas Background="White" />
         <DockPanel LastChildFill="False">
             <ruler:RulerTicksDisplay RulerPosition="Top" DockPanel.Dock="Top" Height="30"
-                            Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='true'}" />
+                                     Visibility="{Binding Orientation, Converter={StaticResource _horizontalVisibilityConverter}}" />
             <ruler:RulerTicksDisplay RulerPosition="Bottom" DockPanel.Dock="Bottom" Height="15"
-                               Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='true'}" />
+                                     Visibility="{Binding Orientation, Converter={StaticResource _horizontalVisibilityConverter}}" />
         </DockPanel>
         <DockPanel LastChildFill="False">
             <ruler:RulerTicksDisplay RulerPosition="Left" DockPanel.Dock="Left" Width="30"
-                             Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='false'}" />
+                                     Visibility="{Binding Orientation, Converter={StaticResource _verticalVisibilityConverter}}" />
             <ruler:RulerTicksDisplay RulerPosition="Right" DockPanel.Dock="Right" Width="30"
-                              Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='false'}" />
+                                     Visibility="{Binding Orientation, Converter={StaticResource _verticalVisibilityConverter}}" />
         </DockPanel>
         <ruler:RulerBorder />
-        <ruler:RulerLineDisplay x:Name="_rulerLineDisplay" Background="Transparent" IsHorizontal="{Binding IsHorizontal}" />
+        <ruler:RulerLineDisplay x:Name="_rulerLineDisplay" Background="Transparent"
+                                IsHorizontal="{Binding IsHorizontal}" />
     </Grid>
 </Window>

@@ -76,7 +76,7 @@ namespace MiP.Ruler
             {
                 CaptureMouse();
                 _resizing = true;
-                _redLine.HideCurrent();
+                _redLine.SetCurrentVisible(false);
             }
         }
 
@@ -85,19 +85,15 @@ namespace MiP.Ruler
             ReleaseMouseCapture();
 
             _resizing = false;
-            _redLine.ShowCurrent();
+            _redLine.SetCurrentVisible(true);
 
             var newpos = new Point(Left, Top);
             var newSize = new Vector(Width, Height);
 
             if ((newpos == _oldWindowPosition) && (_oldWindowSize == newSize) && !_doubleClicked)
-                _redLine.AddLine(_clickPosition);
+                _redLine.AddNewRulerLine(_clickPosition);
 
-            if (_doubleClicked)
-            {
-                _doubleClicked = false;
-                _redLine.ClearLines();
-            }
+            _doubleClicked = false;
         }
 
         private void MainWindow_MouseMove(object sender, MouseEventArgs e)
@@ -156,19 +152,16 @@ namespace MiP.Ruler
 
         private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
         {
-            _redLine.ShowCurrent();
+            _redLine.SetCurrentVisible(true);
         }
 
         private void MainWindow_OnMouseLeave(object sender, MouseEventArgs e)
         {
-            _redLine.HideCurrent();
+            _redLine.SetCurrentVisible(false);
         }
 
         private void MainWindow_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            _redLine.ClearLines();
-            _redLine.HideCurrent();
-
             var pos = e.GetPosition(this);
 
             SwitchDirection(pos, true);
@@ -292,7 +285,7 @@ namespace MiP.Ruler
 
         public void ClearLines()
         {
-            _redLine.ClearLines();
+            _redLine.ClearRulerLines();
         }
 
         [NotifyPropertyChangedInvocator]

@@ -59,6 +59,6 @@
                               Visibility="{Binding IsHorizontal, Converter={StaticResource _booleanToVisibilityConverter}, ConverterParameter='false'}" />
         </DockPanel>
         <ruler:BlackBorder />
-        <ruler:RedLine x:Name="_redLine" Background="Transparent" Horizontal="{Binding IsHorizontal}" />
+        <ruler:RulerLineDisplay x:Name="_redLine" Background="Transparent" IsHorizontal="{Binding IsHorizontal}" />
     </Grid>
 </Window>

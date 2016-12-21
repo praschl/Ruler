@@ -64,7 +64,7 @@
     <Compile Include="CloseCommand.cs" />
     <Compile Include="LeftRuler.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="RedLine.cs" />
+    <Compile Include="RulerLineDisplay.cs" />
     <Compile Include="RightRuler.cs" />
     <Compile Include="SwitchDirectionCommand.cs" />
     <Compile Include="TODO.cs" />

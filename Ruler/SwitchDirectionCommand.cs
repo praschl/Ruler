@@ -20,7 +20,7 @@ namespace MiP.Ruler
 
         public void Execute(object parameter)
         {
-            _window._redLine.ClearLines();
+            _window._redLine.ClearRulerLines();
             _window.SwitchDirection(new Point(0, 0), false);
         }
 

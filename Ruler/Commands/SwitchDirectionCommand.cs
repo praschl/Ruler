@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 
-namespace MiP.Ruler
+namespace MiP.Ruler.Commands
 {
-    public class ClearRulerLinesCommand : ICommand
+    public class SwitchDirectionCommand : ICommand
     {
         private readonly MainWindow _window;
 
-        public ClearRulerLinesCommand(MainWindow window)
+        public SwitchDirectionCommand(MainWindow window)
         {
             _window = window;
         }
@@ -19,7 +20,8 @@ namespace MiP.Ruler
 
         public void Execute(object parameter)
         {
-            _window.ClearLines();
+            _window._rulerLineDisplay.ClearRulerLines();
+            _window.SwitchDirection(new Point(0, 0), false);
         }
 
         public event EventHandler CanExecuteChanged;

@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <ApplicationIcon>assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,13 +58,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="RulerBorder.cs" />
-    <Compile Include="BooleanToVisibilityConverter.cs" />
-    <Compile Include="ClearRulerLinesCommand.cs" />
-    <Compile Include="CloseCommand.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Commands\ClearRulerLinesCommand.cs" />
+    <Compile Include="Commands\CloseCommand.cs" />
     <Compile Include="RulerTicksDisplay.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RulerLineDisplay.cs" />
-    <Compile Include="SwitchDirectionCommand.cs" />
+    <Compile Include="Commands\SwitchDirectionCommand.cs" />
     <Compile Include="TODO.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -106,8 +106,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.ico" />
-    <Resource Include="icon.png" />
+    <Resource Include="assets\icon.ico" />
+    <Resource Include="assets\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

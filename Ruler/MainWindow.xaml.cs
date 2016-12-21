@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using MiP.Ruler.Annotations;
+using MiP.Ruler.Commands;
 
 namespace MiP.Ruler
 {

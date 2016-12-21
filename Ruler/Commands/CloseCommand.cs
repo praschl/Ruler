@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace MiP.Ruler
+namespace MiP.Ruler.Commands
 {
     public class CloseCommand : ICommand
     {

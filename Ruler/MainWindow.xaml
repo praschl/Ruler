@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ruler="clr-namespace:MiP.Ruler"
+        xmlns:converters="clr-namespace:MiP.Ruler.Converters"
         mc:Ignorable="d"
         AllowsTransparency="True"
         WindowStyle="None"
@@ -22,11 +23,11 @@
         Width="601" Height="75" MinWidth="75" MinHeight="75"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         KeyDown="MainWindow_OnKeyDown"
-        Icon="icon.ico"
+        Icon="assets/icon.ico"
         >
     
     <Window.Resources>
-        <ruler:BooleanToVisibilityConverter x:Key="_booleanToVisibilityConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="_booleanToVisibilityConverter" />
     </Window.Resources>
 
     <Window.InputBindings>

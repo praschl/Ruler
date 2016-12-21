@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace MiP.Ruler
+namespace MiP.Ruler.Converters
 {
     public class BooleanToVisibilityConverter : IValueConverter
     {

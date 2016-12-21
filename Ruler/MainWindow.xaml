@@ -32,12 +32,14 @@
 
     <Window.InputBindings>
         <KeyBinding Key="C" Command="{Binding ClearRulerLinesCommand}" />
-        <KeyBinding Key="D" Command="{Binding SwitchDirectionCommand}" />
+        <KeyBinding Key="O" Command="{Binding ToggleOrientationCommand}" />
+        <KeyBinding Key="H" Command="{Binding SwitchHorizontalCommand}" />
+        <KeyBinding Key="V" Command="{Binding SwitchVerticalCommand}" />
     </Window.InputBindings>
 
     <Window.ContextMenu>
         <ContextMenu>
-            <MenuItem Header="{Binding SwitchDirectionText}" Command="{Binding SwitchDirectionCommand}" />
+            <MenuItem Header="{Binding SwitchDirectionText}" Command="{Binding ToggleOrientationCommand}" />
             <MenuItem Header="Clear Lines" Command="{Binding ClearRulerLinesCommand}" />
             <Separator />
             <!--<MenuItem Header="About"></MenuItem>-->

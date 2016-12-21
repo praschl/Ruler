@@ -19,10 +19,12 @@ Mousewheel to change transparency.
 
 ## Keyboard
 
-C to clear the lines.
-D to switch between horizontal and vertical
+C ... to clear the lines.
+O ... to toggle between horizontal and vertical orientation
+H ... switch to horizontal orientation
+V ... switch to vertical orientation
 
-Alt-F4 to quit.
+Alt-F4 ... quit.
 
 ## Not implemented yet, but planned
 

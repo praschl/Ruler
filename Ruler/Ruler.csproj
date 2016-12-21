@@ -64,7 +64,7 @@
     <Compile Include="RulerTicksDisplay.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RulerLineDisplay.cs" />
-    <Compile Include="Commands\SwitchDirectionCommand.cs" />
+    <Compile Include="Commands\SwitchOrientationCommand.cs" />
     <Compile Include="TODO.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

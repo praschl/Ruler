@@ -1,4 +1,10 @@
-﻿// Settings über Context Menü bzw F4
+﻿// refactor "IsHorizontal" to Orientation enum
+
+// Lock automatic Horizontal / Vertical switching on drag-resize.
+
+// Keep lines when switching
+
+// Settings über Context Menü bzw F4
 // - Transparenz
 // - Hintergrundfarbe
 // - "Rote Linie"-Farbe

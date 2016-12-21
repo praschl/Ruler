@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using MiP.Ruler.Annotations;
 using MiP.Ruler.Commands;
@@ -34,7 +35,9 @@ namespace MiP.Ruler
 
         public ICommand ClearRulerLinesCommand => new ClearRulerLinesCommand(this);
 
-        public ICommand SwitchDirectionCommand => new SwitchDirectionCommand(this);
+        public ICommand ToggleOrientationCommand => new SwitchOrientationCommand(this, true);
+        public ICommand SwitchHorizontalCommand => new SwitchOrientationCommand(this, Orientation.Horizontal);
+        public ICommand SwitchVerticalCommand => new SwitchOrientationCommand(this, Orientation.Vertical);
 
         public bool IsHorizontal
         {
@@ -164,10 +167,12 @@ namespace MiP.Ruler
         {
             var pos = e.GetPosition(this);
 
-            SwitchDirection(pos, true);
+            SwitchDirection(pos);
+
+            _statusDoubleClicked = true;
         }
 
-        public void SwitchDirection(Point pos, bool isDoubleClick)
+        public void SwitchDirection(Point pos)
         {
             var left = Left + pos.X - pos.Y;
             var top = Top + pos.Y - pos.X;
@@ -178,8 +183,6 @@ namespace MiP.Ruler
             Top = top;
             Width = width;
             Height = height;
-
-            _statusDoubleClicked = isDoubleClick;
         }
 
         private void InitializeSizingBoxes()

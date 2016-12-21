@@ -10,18 +10,17 @@ namespace MiP.Ruler
 {
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private Point _lastClickPosition;
-        private bool _statusDoubleClicked;
-        private bool _statusResizing;
-
         private const int ResizingBoxSize = 5;
         private SizingBox _currentResizingBox;
+        private bool _isHorizontal;
+        private Point _lastClickPosition;
 
         private Point _oldWindowPosition;
         private Vector _oldWindowSize;
 
         private SizingBox[] _sizingBoxes;
-        private bool _isHorizontal;
+        private bool _statusDoubleClicked;
+        private bool _statusResizing;
         private string _switchDirectionText;
 
         public MainWindow()
@@ -30,7 +29,7 @@ namespace MiP.Ruler
 
             InitializeSizingBoxes();
         }
-        
+
         public ICommand CloseCommand => new CloseCommand(this);
 
         public ICommand ClearRulerLinesCommand => new ClearRulerLinesCommand(this);
@@ -69,7 +68,7 @@ namespace MiP.Ruler
             _oldWindowSize = new Vector(Width, Height);
             _lastClickPosition = e.GetPosition(this);
 
-            if (Cursor == Cursors.Arrow)
+            if (_currentResizingBox.Cursor == Cursors.Arrow)
             {
                 DragMove();
             }
@@ -233,21 +232,26 @@ namespace MiP.Ruler
             if (_currentResizingBox.SizeRight)
             {
                 width += delta.X;
-                _lastClickPosition.X = newPos.X;
+                if (width > MinWidth)
+                    _lastClickPosition.X = newPos.X;
             }
 
             if (_currentResizingBox.SizeBottom)
             {
                 height += delta.Y;
-                _lastClickPosition.Y = newPos.Y;
+                if (height > MinHeight)
+                    _lastClickPosition.Y = newPos.Y;
             }
 
             if ((left + width > 2*ResizingBoxSize) && (left < SystemParameters.PrimaryScreenWidth - ResizingBoxSize*2))
                 Left = left;
+
             if ((top + height > 2*ResizingBoxSize) && (top < SystemParameters.PrimaryScreenHeight - ResizingBoxSize*2))
                 Top = top;
+
             if ((width > MinWidth) && (width < MaxWidth))
                 Width = width;
+
             if ((height > MinHeight) && (height < MaxHeight))
                 Height = height;
         }

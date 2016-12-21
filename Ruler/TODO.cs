@@ -8,5 +8,3 @@
 // Settings (auch Größe + Position) beim Beenden speichern
 
 // Systray Icon + Hotkey
-
-// besseren Resizing Code

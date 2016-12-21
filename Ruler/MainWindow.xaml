@@ -64,6 +64,6 @@
         </DockPanel>
         <ruler:RulerBorder />
         <ruler:RulerLineDisplay x:Name="_rulerLineDisplay" Background="Transparent"
-                                IsHorizontal="{Binding IsHorizontal}" />
+                                Orientation="{Binding Orientation}" />
     </Grid>
 </Window>

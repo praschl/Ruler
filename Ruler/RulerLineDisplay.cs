@@ -14,17 +14,18 @@ namespace MiP.Ruler
 {
     public class RulerLineDisplay : Canvas, INotifyPropertyChanged
     {
-        public static readonly DependencyProperty IsHorizontalProperty = DependencyProperty.Register(
-            "IsHorizontal", typeof(bool), typeof(RulerLineDisplay), new PropertyMetadata(true, (o, args) => { ((RulerLineDisplay) o)?.DirectionChanged(); }));
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
+            "Orientation", typeof(Orientation), typeof(RulerLineDisplay), new PropertyMetadata(Orientation.Horizontal, (o, args) => { ((RulerLineDisplay) o)?.DirectionChanged(); }));
+
 
         private readonly Size _infiniteSize = new Size(double.PositiveInfinity, double.PositiveInfinity);
 
         private readonly List<Line> _rulerLines = new List<Line>();
         private readonly List<TextBlock> _rulerTexts = new List<TextBlock>();
-        private TextBlock _currentRulerText;
-        private TextBlock[] _currentRulerTextArray;
         private Line _currentRulerLine;
         private Line[] _currentRulerLineArray;
+        private TextBlock _currentRulerText;
+        private TextBlock[] _currentRulerTextArray;
 
         public RulerLineDisplay()
         {
@@ -33,11 +34,11 @@ namespace MiP.Ruler
             MouseMove += MouseMoveHandler;
             SizeChanged += SizeChangedHandler;
         }
-
-        public bool IsHorizontal
+        
+        public Orientation Orientation
         {
-            get { return (bool) GetValue(IsHorizontalProperty); }
-            set { SetValue(IsHorizontalProperty, value); }
+            get { return (Orientation) GetValue(OrientationProperty); }
+            set { SetValue(OrientationProperty, value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -71,16 +72,24 @@ namespace MiP.Ruler
 
         private void SizeChangedHandler(object sender, SizeChangedEventArgs e)
         {
-            var newLineValue = IsHorizontal ? ActualHeight - 1 : ActualWidth - 1;
-            var newTextValue = IsHorizontal ? ActualHeight/2 - _currentRulerText.FontSize/2 : ActualWidth/2 - _currentRulerText.DesiredSize.Width/2;
-
-            var lineSetter = IsHorizontal
-                ? new Action<Line, double>((line, y) => line.Y2 = y)
-                : ((line, x) => line.X2 = x);
-
-            var textSetter = IsHorizontal
-                ? new Action<TextBlock, double>(SetTop)
-                : SetLeft;
+            double newLineValue;
+            double newTextValue;
+            Action<Line, double> lineSetter;
+            Action<TextBlock, double> textSetter;
+            if (Orientation == Orientation.Horizontal)
+            {
+                newLineValue = ActualHeight - 1;
+                newTextValue = ActualHeight/2 - _currentRulerText.FontSize/2;
+                lineSetter = (line, y) => line.Y2 = y;
+                textSetter = SetTop;
+            }
+            else
+            {
+                newLineValue = ActualWidth - 1;
+                newTextValue = ActualWidth/2 - _currentRulerText.DesiredSize.Width/2;
+                lineSetter = (line, x) => line.X2 = x;
+                textSetter = SetLeft;
+            }
 
             foreach (var line in _rulerLines.Concat(_currentRulerLineArray))
                 lineSetter(line, newLineValue);
@@ -104,7 +113,7 @@ namespace MiP.Ruler
 
         private void RefreshCurrentRulerLine(Point pos)
         {
-            if (IsHorizontal)
+            if (Orientation == Orientation.Horizontal)
             {
                 _currentRulerLine.X1 = _currentRulerLine.X2 = pos.X;
                 _currentRulerLine.Y1 = 1;
@@ -122,7 +131,7 @@ namespace MiP.Ruler
 
         private void RefreshRulerText(Point pos, TextBlock pixelText)
         {
-            if (IsHorizontal)
+            if (Orientation == Orientation.Horizontal)
             {
                 pixelText.Text = pos.X.ToString("0");
                 pixelText.Measure(_infiniteSize);
@@ -163,7 +172,7 @@ namespace MiP.Ruler
             _rulerTexts.Add(newText);
             Children.Add(newText);
 
-            if (IsHorizontal)
+            if (Orientation == Orientation.Horizontal)
             {
                 newLine.Y1 = 1;
                 newLine.Y2 = ActualHeight - 1;
@@ -198,7 +207,7 @@ namespace MiP.Ruler
             _currentRulerLine.Stroke = color;
             _currentRulerText.Foreground = color;
         }
-        
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

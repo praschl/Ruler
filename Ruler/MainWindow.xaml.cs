@@ -16,9 +16,8 @@ namespace MiP.Ruler
 
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private const int ResizingBoxSize = 5;
+        private const int ResizingBoxSize = 10;
         private SizingBox _currentResizingBox;
-        private bool _isHorizontal;
         private Point _lastClickPosition;
 
         private Point _oldWindowPosition;
@@ -44,20 +43,7 @@ namespace MiP.Ruler
         public ICommand ToggleOrientationCommand => new SwitchOrientationCommand(this, true);
         public ICommand SwitchHorizontalCommand => new SwitchOrientationCommand(this, Orientation.Horizontal);
         public ICommand SwitchVerticalCommand => new SwitchOrientationCommand(this, Orientation.Vertical);
-
-        public bool IsHorizontal
-        {
-            get { return _isHorizontal; }
-            set
-            {
-                if (value == _isHorizontal) return;
-                _isHorizontal = value;
-                OnPropertyChanged();
-
-                SwitchDirectionText = _isHorizontal ? "Switch to vertical" : "Switch to horizontal";
-            }
-        }
-
+        
         public Orientation Orientation
         {
             get { return _orientation; }
@@ -144,7 +130,6 @@ namespace MiP.Ruler
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateSizingBoxes();
-            IsHorizontal = Width > Height;
             Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
         }
 

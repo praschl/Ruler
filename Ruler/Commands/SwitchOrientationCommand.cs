@@ -30,11 +30,7 @@ namespace MiP.Ruler.Commands
 
         public void Execute(object parameter)
         {
-            if (!_toggle && (
-                    _orientation == Orientation.Horizontal && _window.IsHorizontal
-                    ||
-                    _orientation == Orientation.Vertical && !_window.IsHorizontal
-                ))
+            if (!_toggle && _orientation == _window.Orientation)
                 return;
 
             _window._rulerLineDisplay.ClearRulerLines();

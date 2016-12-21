@@ -1,6 +1,4 @@
-﻿// refactor "IsHorizontal" to Orientation enum
-
-// Lock automatic Horizontal / Vertical switching on drag-resize.
+﻿// Lock automatic Horizontal / Vertical switching on drag-resize.
 
 // Keep lines when switching
 

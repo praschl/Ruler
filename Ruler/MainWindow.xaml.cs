@@ -68,6 +68,8 @@ namespace MiP.Ruler
             }
         }
 
+        public bool LockOrientationOnResize { get; set; } = true;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -130,7 +132,8 @@ namespace MiP.Ruler
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateSizingBoxes();
-            Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
+            if (!LockOrientationOnResize)
+                Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
         }
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
@@ -188,6 +191,8 @@ namespace MiP.Ruler
             Top = top;
             Width = width;
             Height = height;
+
+            Orientation = Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal;
         }
 
         private void InitializeSizingBoxes()
@@ -251,10 +256,10 @@ namespace MiP.Ruler
                     _lastClickPosition.Y = newPos.Y;
             }
 
-            if ((left + width > 2*ResizingBoxSize) && (left < SystemParameters.PrimaryScreenWidth - ResizingBoxSize*2))
+            if ((left + width > 2 * ResizingBoxSize) && (left < SystemParameters.PrimaryScreenWidth - ResizingBoxSize * 2))
                 Left = left;
 
-            if ((top + height > 2*ResizingBoxSize) && (top < SystemParameters.PrimaryScreenHeight - ResizingBoxSize*2))
+            if ((top + height > 2 * ResizingBoxSize) && (top < SystemParameters.PrimaryScreenHeight - ResizingBoxSize * 2))
                 Top = top;
 
             if ((width > MinWidth) && (width < MaxWidth))

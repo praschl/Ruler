@@ -1,16 +1,16 @@
+﻿
 // Bug when resizing at Left (Top too?) on second screen, window will resize until its at least partially on primary screen.
-
-// Lock automatic Horizontal / Vertical switching on drag-resize.
+// fixed - needs testing on 2 screens.
 
 // refactor ruler line + text into a small class.
 
 // Keep lines when switching
 // draw measuring between multiple lines
-  // draw a blue box between lines, with size inside (outside if too small)
-  // maybe draw the box only when mouseover
+// draw a blue box between lines, with size inside (outside if too small)
+// maybe draw the box only when mouseover
 
 // Option draw percentages instead of pixel, or additional to pixel (below)
-  // When resizing keep % distance between lines
+// When resizing keep % distance between lines
 
 // Let user drag origin from (0,0) requires drawing negative part of ruler
 

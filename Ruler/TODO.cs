@@ -1,3 +1,5 @@
+// Bug when resizing at Left (Top too?) on second screen, window will resize until its at least partially on primary screen.
+
 // Lock automatic Horizontal / Vertical switching on drag-resize.
 
 // Keep lines when switching

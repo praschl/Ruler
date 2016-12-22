@@ -1,6 +1,12 @@
-﻿// Lock automatic Horizontal / Vertical switching on drag-resize.
+// Lock automatic Horizontal / Vertical switching on drag-resize.
 
 // Keep lines when switching
+// draw measuring between multiple lines
+  // draw a blue box between lines, with size inside (outside if too small)
+  // maybe draw the box only when mouseover
+
+// Option draw percentages instead of pixel
+  // When resizing keep % distance between lines
 
 // Let user drag origin from (0,0) 
 

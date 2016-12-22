@@ -256,16 +256,13 @@ namespace MiP.Ruler
                     _lastClickPosition.Y = newPos.Y;
             }
 
-            if ((left + width > 2 * ResizingBoxSize) && (left < SystemParameters.PrimaryScreenWidth - ResizingBoxSize * 2))
-                Left = left;
+            Left = left;
+            Top = top;
 
-            if ((top + height > 2 * ResizingBoxSize) && (top < SystemParameters.PrimaryScreenHeight - ResizingBoxSize * 2))
-                Top = top;
-
-            if ((width > MinWidth) && (width < MaxWidth))
+            if (width > MinWidth && width < MaxWidth)
                 Width = width;
 
-            if ((height > MinHeight) && (height < MaxHeight))
+            if (height > MinHeight && height < MaxHeight)
                 Height = height;
         }
 

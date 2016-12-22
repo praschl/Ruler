@@ -1,8 +1,4 @@
-﻿
-// Bug when resizing at Left (Top too?) on second screen, window will resize until its at least partially on primary screen.
-// fixed - needs testing on 2 screens.
-
-// refactor ruler line + text into a small class.
+﻿// refactor ruler line + text into a small class.
 
 // Keep lines when switching
 // draw measuring between multiple lines
@@ -24,3 +20,6 @@
 // Settings (auch Größe + Position) beim Beenden speichern
 
 // Systray Icon + Hotkey
+
+// Bug when resizing at Left (Top too?) on second screen, window will resize until its at least partially on primary screen.
+// fixed - needs testing on 2 screens.

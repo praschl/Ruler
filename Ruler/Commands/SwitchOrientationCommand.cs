@@ -33,7 +33,7 @@ namespace MiP.Ruler.Commands
             if (!_toggle && _orientation == _window.Orientation)
                 return;
 
-            _window._rulerLineDisplay.ClearRulerLines();
+            //_window.ClearLines();
             _window.SwitchDirection(new Point(_window.Width/2, _window.Height/2));
         }
 

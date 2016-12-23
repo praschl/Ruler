@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -68,9 +69,25 @@ namespace MiP.Ruler
             }
         }
 
+        // TODO: Move to settings
         public bool LockOrientationOnResize { get; set; } = true;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void ClearLines()
+        {
+            _rulerLineDisplay.ClearRulerLines();
+        }
+
+        private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            _rulerLineDisplay.SetCurrentVisible(true);
+        }
+
+        private void MainWindow_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            _rulerLineDisplay.SetCurrentVisible(false);
+        }
 
         private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -90,8 +107,26 @@ namespace MiP.Ruler
             }
         }
 
+        private void MainWindow_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!_statusResizing)
+                CheckSizingBox(e);
+
+            if (_statusResizing)
+                DoResizing(e);
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            RecalculateSizingBoxes();
+            if (!LockOrientationOnResize)
+                Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
+        }
+
         private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            Console.WriteLine("mouseup");
+
             ReleaseMouseCapture();
 
             _statusResizing = false;
@@ -106,13 +141,15 @@ namespace MiP.Ruler
             _statusDoubleClicked = false;
         }
 
-        private void MainWindow_MouseMove(object sender, MouseEventArgs e)
+        private void MainWindow_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (!_statusResizing)
-                CheckSizingBox(e);
+            _rulerLineDisplay.RemoveLast();
 
-            if (_statusResizing)
-                DoResizing(e);
+            var pos = e.GetPosition(this);
+
+            SwitchDirection(pos);
+
+            _statusDoubleClicked = true;
         }
 
         private void MainWindow_OnMouseWheel(object sender, MouseWheelEventArgs e)
@@ -127,13 +164,6 @@ namespace MiP.Ruler
                 newOpacity = 0.1;
 
             Opacity = newOpacity;
-        }
-
-        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            RecalculateSizingBoxes();
-            if (!LockOrientationOnResize)
-                Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
         }
 
         private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
@@ -159,25 +189,6 @@ namespace MiP.Ruler
                 Top -= pixel;
             if (e.Key == Key.Down)
                 Top += pixel;
-        }
-
-        private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
-        {
-            _rulerLineDisplay.SetCurrentVisible(true);
-        }
-
-        private void MainWindow_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            _rulerLineDisplay.SetCurrentVisible(false);
-        }
-
-        private void MainWindow_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var pos = e.GetPosition(this);
-
-            SwitchDirection(pos);
-
-            _statusDoubleClicked = true;
         }
 
         public void SwitchDirection(Point pos)
@@ -298,11 +309,6 @@ namespace MiP.Ruler
             Cursor = _currentResizingBox.Cursor;
         }
         
-        public void ClearLines()
-        {
-            _rulerLineDisplay.ClearRulerLines();
-        }
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

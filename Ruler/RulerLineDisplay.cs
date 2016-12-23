@@ -14,9 +14,10 @@ namespace MiP.Ruler
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
             "Orientation", typeof(Orientation), typeof(RulerLineDisplay), new PropertyMetadata(Orientation.Horizontal, (o, args) => { ((RulerLineDisplay) o)?.DirectionChanged(); }));
 
-        private RulerLine _currentLine;
         private readonly RulerLine[] _currentLineInArray = new RulerLine[1];
         private readonly List<RulerLine> _rulerLines = new List<RulerLine>();
+
+        private RulerLine _currentLine;
 
         public RulerLineDisplay()
         {
@@ -25,46 +26,21 @@ namespace MiP.Ruler
             MouseMove += MouseMoveHandler;
             SizeChanged += SizeChangedHandler;
         }
-        
+
+        private void Initialize()
+        {
+            _currentLineInArray[0] = _currentLine = new RulerLine(this, new Point(-100, -100));
+        }
+
+        // TODO: Move to settings
+        public bool ClearLinesOnOrientationChange { get; set; } = false;
+
         public Orientation Orientation
         {
             get { return (Orientation) GetValue(OrientationProperty); }
             set { SetValue(OrientationProperty, value); }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void Initialize()
-        {
-            _currentLineInArray[0] = _currentLine = new RulerLine(this, new Point(0, 0));
-        }
-
-        private void SizeChangedHandler(object sender, SizeChangedEventArgs e)
-        {
-            foreach (var line in _rulerLines.Concat(_currentLineInArray))
-                line.ResizeToFit();
-        }
-
-        private void MouseMoveHandler(object sender, MouseEventArgs e)
-        {
-            var pos = e.GetPosition(this);
-
-            RefreshCurrentRulerLine(pos);
-        }
-
-        private void DirectionChanged()
-        {
-            ClearRulerLines();
-
-            RefreshCurrentRulerLine(Mouse.GetPosition(this));
-        }
-
-        private void RefreshCurrentRulerLine(Point pos)
-        {
-            _currentLine.MoveLineTo(pos);
-            _currentLine.ResizeToFit();
-        }
-        
         public void AddNewRulerLine(Point position)
         {
             _rulerLines.Add(new RulerLine(this, position));
@@ -83,10 +59,52 @@ namespace MiP.Ruler
             _currentLine.SetVisible(visible);
         }
 
+        public void RemoveLast()
+        {
+            if (_rulerLines.Count > 0)
+                _rulerLines[_rulerLines.Count - 1].RemoveFromDisplay();
+        }
+
+        private void SizeChangedHandler(object sender, SizeChangedEventArgs e)
+        {
+            foreach (var line in _rulerLines.Concat(_currentLineInArray))
+                line.ResizeToFit();
+        }
+
+        private void MouseMoveHandler(object sender, MouseEventArgs e)
+        {
+            var pos = e.GetPosition(this);
+
+            RefreshCurrentRulerLine(pos);
+        }
+
+        private void DirectionChanged()
+        {
+            if (ClearLinesOnOrientationChange)
+                ClearRulerLines();
+
+            RefreshCurrentRulerLine(Mouse.GetPosition(this));
+
+            foreach (var line in _rulerLines)
+                line.ChangeDirection();
+        }
+
+        private void RefreshCurrentRulerLine(Point pos)
+        {
+            _currentLine.MoveLineTo(pos);
+            _currentLine.ResizeToFit();
+        }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion
     }
 }

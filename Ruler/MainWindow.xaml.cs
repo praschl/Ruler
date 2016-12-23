@@ -218,6 +218,29 @@ namespace MiP.Ruler
             };
         }
 
+        private void RecalculateSizingBoxes()
+        {
+            // ReSharper disable InconsistentNaming
+            var w2bs = Width - 2 * ResizingBoxSize;
+            var h2bs = Height - 2 * ResizingBoxSize;
+            // ReSharper restore InconsistentNaming
+            var wr = Width - ResizingBoxSize;
+            var hb = Height - ResizingBoxSize;
+
+            _sizingBoxes[0].Rect.Width = w2bs;
+            _sizingBoxes[0].Rect.Height = h2bs;
+            _sizingBoxes[2].Rect.Width = w2bs;
+            _sizingBoxes[3].Rect.X = wr;
+            _sizingBoxes[4].Rect.X = wr;
+            _sizingBoxes[4].Rect.Height = h2bs;
+            _sizingBoxes[5].Rect.X = wr;
+            _sizingBoxes[5].Rect.Y = hb;
+            _sizingBoxes[6].Rect.Y = hb;
+            _sizingBoxes[6].Rect.Width = w2bs;
+            _sizingBoxes[7].Rect.Y = hb;
+            _sizingBoxes[8].Rect.Height = h2bs;
+        }
+
         private void DoResizing(MouseEventArgs e)
         {
             var newPos = e.GetPosition(this);
@@ -274,30 +297,7 @@ namespace MiP.Ruler
 
             Cursor = _currentResizingBox.Cursor;
         }
-
-        private void RecalculateSizingBoxes()
-        {
-            // ReSharper disable InconsistentNaming
-            var w2bs = Width - 2*ResizingBoxSize;
-            var h2bs = Height - 2*ResizingBoxSize;
-            // ReSharper restore InconsistentNaming
-            var wr = Width - ResizingBoxSize;
-            var hb = Height - ResizingBoxSize;
-
-            _sizingBoxes[0].Rect.Width = w2bs;
-            _sizingBoxes[0].Rect.Height = h2bs;
-            _sizingBoxes[2].Rect.Width = w2bs;
-            _sizingBoxes[3].Rect.X = wr;
-            _sizingBoxes[4].Rect.X = wr;
-            _sizingBoxes[4].Rect.Height = h2bs;
-            _sizingBoxes[5].Rect.X = wr;
-            _sizingBoxes[5].Rect.Y = hb;
-            _sizingBoxes[6].Rect.Y = hb;
-            _sizingBoxes[6].Rect.Width = w2bs;
-            _sizingBoxes[7].Rect.Y = hb;
-            _sizingBoxes[8].Rect.Height = h2bs;
-        }
-
+        
         public void ClearLines()
         {
             _rulerLineDisplay.ClearRulerLines();

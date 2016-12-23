@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -43,7 +42,7 @@ namespace MiP.Ruler
         private void SizeChangedHandler(object sender, SizeChangedEventArgs e)
         {
             foreach (var line in _rulerLines.Concat(_currentLineInArray))
-                line.RefreshSize();
+                line.ResizeToFit();
         }
 
         private void MouseMoveHandler(object sender, MouseEventArgs e)
@@ -62,8 +61,8 @@ namespace MiP.Ruler
 
         private void RefreshCurrentRulerLine(Point pos)
         {
-            _currentLine.RefreshLine(pos);
-            _currentLine.RefreshSize();
+            _currentLine.MoveLineTo(pos);
+            _currentLine.ResizeToFit();
         }
         
         public void AddNewRulerLine(Point position)

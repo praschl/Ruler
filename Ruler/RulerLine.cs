@@ -7,7 +7,7 @@ namespace MiP.Ruler
 {
     public class RulerLine
     {
-        public Point Position { get; }
+        public Point Position { get; private set; }
         private readonly RulerLineDisplay _display;
         private readonly Line _line;
         private readonly TextBlock _textBlock;
@@ -34,83 +34,59 @@ namespace MiP.Ruler
 
             _display.Children.Add(_textBlock);
 
+            MoveLineTo(position);
+            ResizeToFit();
+        }
+        
+        public void MoveLineTo(Point position)
+        {
             if (_display.Orientation == Orientation.Horizontal)
             {
+                _line.X1 = _line.X2 = position.X;
                 _line.Y1 = 1;
-                _line.Y2 = _display.ActualHeight - 1;
-                _line.X1 = position.X;
-                _line.X2 = position.X;
-                RefreshRulerText(position);
-                Canvas.SetTop(_textBlock, _display.ActualHeight / 2 - _textBlock.FontSize / 2);
+                _line.Y2 = _display.ActualHeight - 2;
+
+                _textBlock.Text = position.X.ToString("0");
+                _textBlock.Measure(_infiniteSize);
+
+                if (position.X >= _textBlock.DesiredSize.Width + 4)
+                    Canvas.SetLeft(_textBlock, position.X - _textBlock.DesiredSize.Width - 2);
+                else
+                    Canvas.SetLeft(_textBlock, position.X + 2);
             }
             else
             {
+                _line.Y1 = _line.Y2 = position.Y;
                 _line.X1 = 1;
-                _line.X2 = _display.ActualWidth - 1;
-                _line.Y1 = position.Y;
-                _line.Y2 = position.Y;
-                RefreshRulerText(position);
-                Canvas.SetLeft(_textBlock, _display.ActualWidth / 2 - _textBlock.DesiredSize.Width / 2);
+                _line.X2 = _display.ActualWidth - 2;
+
+                _textBlock.Text = position.Y.ToString("0");
+                _textBlock.Measure(_infiniteSize);
+
+                if (position.Y >= _textBlock.DesiredSize.Height + 4)
+                    Canvas.SetTop(_textBlock, position.Y - _textBlock.DesiredSize.Height - 2);
+                else
+                    Canvas.SetTop(_textBlock, position.Y + 2);
             }
+
+            Position = position;
         }
 
-        public void RefreshSize()
+        public void ResizeToFit()
         {
             if (_display.Orientation == Orientation.Horizontal)
             {
                 var lineY = _display.ActualHeight - 1;
-                var textY = _display.ActualHeight/2 - _textBlock.FontSize/2;
+                var textY = _display.ActualHeight / 2 - _textBlock.FontSize / 2;
                 _line.Y2 = lineY;
                 Canvas.SetTop(_textBlock, textY);
             }
             else
             {
                 var lineX = _display.ActualWidth - 1;
-                var textX = _display.ActualWidth/2 - _textBlock.DesiredSize.Width/2;
+                var textX = _display.ActualWidth / 2 - _textBlock.DesiredSize.Width / 2;
                 _line.X2 = lineX;
                 Canvas.SetLeft(_textBlock, textX);
-            }
-        }
-        
-        public void RefreshLine(Point pos)
-        {
-            if (_display.Orientation == Orientation.Horizontal)
-            {
-                _line.X1 = _line.X2 = pos.X;
-                _line.Y1 = 1;
-                _line.Y2 = _display.ActualHeight - 2;
-            }
-            else
-            {
-                _line.Y1 = _line.Y2 = pos.Y;
-                _line.X1 = 1;
-                _line.X2 = _display.ActualWidth - 2;
-            }
-
-            RefreshRulerText(pos);
-        }
-        
-        private void RefreshRulerText(Point pos)
-        {
-            if (_display.Orientation == Orientation.Horizontal)
-            {
-                _textBlock.Text = pos.X.ToString("0");
-                _textBlock.Measure(_infiniteSize);
-
-                if (pos.X >= _textBlock.DesiredSize.Width + 4)
-                    Canvas.SetLeft(_textBlock, pos.X - _textBlock.DesiredSize.Width - 2);
-                else
-                    Canvas.SetLeft(_textBlock, pos.X + 2);
-            }
-            else
-            {
-                _textBlock.Text = pos.Y.ToString("0");
-                _textBlock.Measure(_infiniteSize);
-
-                if (pos.Y >= _textBlock.DesiredSize.Height + 4)
-                    Canvas.SetTop(_textBlock, pos.Y - _textBlock.DesiredSize.Height - 2);
-                else
-                    Canvas.SetTop(_textBlock, pos.Y + 2);
             }
         }
 

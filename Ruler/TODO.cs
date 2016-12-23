@@ -1,7 +1,4 @@
-﻿// refactor ruler line + text into a small class.
-
-// Keep lines when switching
-// draw measuring between multiple lines
+﻿// draw measuring between multiple lines
 // draw a blue box between lines, with size inside (outside if too small)
 // maybe draw the box only when mouseover
 

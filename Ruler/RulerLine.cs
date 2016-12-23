@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -101,6 +102,13 @@ namespace MiP.Ruler
         {
             _display.Children.Remove(_line);
             _display.Children.Remove(_textBlock);
+        }
+
+        public void ChangeDirection()
+        {
+            Position = new Point(Position.Y, Position.X);
+            MoveLineTo(Position);
+            ResizeToFit();
         }
     }
 }

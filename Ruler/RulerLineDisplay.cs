@@ -31,10 +31,7 @@ namespace MiP.Ruler
         {
             _currentLineInArray[0] = _currentLine = new RulerLine(this, new Point(-100, -100));
         }
-
-        // TODO: Move to settings
-        public bool ClearLinesOnOrientationChange { get; set; } = false;
-
+        
         public Orientation Orientation
         {
             get { return (Orientation) GetValue(OrientationProperty); }
@@ -73,14 +70,14 @@ namespace MiP.Ruler
 
         private void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            var pos = e.GetPosition(this);
+            var position = e.GetPosition(this);
 
-            RefreshCurrentRulerLine(pos);
+            RefreshCurrentRulerLine(position);
         }
 
         private void DirectionChanged()
         {
-            if (ClearLinesOnOrientationChange)
+            if (Config.Instance.ClearLinesOnOrientationChange)
                 ClearRulerLines();
 
             RefreshCurrentRulerLine(Mouse.GetPosition(this));

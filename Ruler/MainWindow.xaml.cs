@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -69,9 +68,6 @@ namespace MiP.Ruler
             }
         }
 
-        // TODO: Move to settings
-        public bool LockOrientationOnResize { get; set; } = true;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void ClearLines()
@@ -119,23 +115,21 @@ namespace MiP.Ruler
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateSizingBoxes();
-            if (!LockOrientationOnResize)
+            if (!Config.Instance.LockOrientationOnResize)
                 Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
         }
 
         private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Console.WriteLine("mouseup");
-
             ReleaseMouseCapture();
 
             _statusResizing = false;
             _rulerLineDisplay.SetCurrentVisible(true);
 
-            var newpos = new Point(Left, Top);
+            var newPosition = new Point(Left, Top);
             var newSize = new Vector(Width, Height);
 
-            if ((newpos == _oldWindowPosition) && (_oldWindowSize == newSize) && !_statusDoubleClicked)
+            if ((newPosition == _oldWindowPosition) && (_oldWindowSize == newSize) && !_statusDoubleClicked)
                 _rulerLineDisplay.AddNewRulerLine(_lastClickPosition);
 
             _statusDoubleClicked = false;
@@ -145,9 +139,9 @@ namespace MiP.Ruler
         {
             _rulerLineDisplay.RemoveLast();
 
-            var pos = e.GetPosition(this);
+            var position = e.GetPosition(this);
 
-            SwitchDirection(pos);
+            SwitchDirection(position);
 
             _statusDoubleClicked = true;
         }
@@ -208,54 +202,50 @@ namespace MiP.Ruler
 
         private void InitializeSizingBoxes()
         {
-            // ReSharper disable InconsistentNaming
-            var w2bs = Width - 2*ResizingBoxSize;
-            var h2bs = Height - 2*ResizingBoxSize;
-            // ReSharper restore InconsistentNaming
-            var wr = Width - ResizingBoxSize;
-            var hb = Height - ResizingBoxSize;
+            var width = Width - 2*ResizingBoxSize; // width of middle boxes (top, center, bottom)
+            var height = Height - 2*ResizingBoxSize; // height of middle boxes (left, middle right)
+            var right = Width - ResizingBoxSize; // x of right boxes (right-top, right-middle, right-bottom)
+            var bottom = Height - ResizingBoxSize; // y of bottom boxes (left-bottom, middle-bottom, right-bottom)
 
             _sizingBoxes = new[]
             {
-                new SizingBox {Rect = new Rect(ResizingBoxSize, ResizingBoxSize, w2bs, h2bs), Cursor = Cursors.Arrow}, // center
+                new SizingBox {Rect = new Rect(ResizingBoxSize, ResizingBoxSize, width, height), Cursor = Cursors.Arrow}, // center
                 new SizingBox {Rect = new Rect(0, 0, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNWSE, SizeLeft = true, SizeTop = true},
-                new SizingBox {Rect = new Rect(ResizingBoxSize, 0, w2bs, ResizingBoxSize), Cursor = Cursors.SizeNS, SizeTop = true},
-                new SizingBox {Rect = new Rect(wr, 0, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNESW, SizeRight = true, SizeTop = true},
-                new SizingBox {Rect = new Rect(wr, ResizingBoxSize, ResizingBoxSize, h2bs), Cursor = Cursors.SizeWE, SizeRight = true},
-                new SizingBox {Rect = new Rect(wr, hb, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNWSE, SizeRight = true, SizeBottom = true},
-                new SizingBox {Rect = new Rect(ResizingBoxSize, hb, w2bs, ResizingBoxSize), Cursor = Cursors.SizeNS, SizeBottom = true},
-                new SizingBox {Rect = new Rect(0, hb, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNESW, SizeLeft = true, SizeBottom = true},
-                new SizingBox {Rect = new Rect(0, ResizingBoxSize, ResizingBoxSize, h2bs), Cursor = Cursors.SizeWE, SizeLeft = true}
+                new SizingBox {Rect = new Rect(ResizingBoxSize, 0, width, ResizingBoxSize), Cursor = Cursors.SizeNS, SizeTop = true},
+                new SizingBox {Rect = new Rect(right, 0, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNESW, SizeRight = true, SizeTop = true},
+                new SizingBox {Rect = new Rect(right, ResizingBoxSize, ResizingBoxSize, height), Cursor = Cursors.SizeWE, SizeRight = true},
+                new SizingBox {Rect = new Rect(right, bottom, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNWSE, SizeRight = true, SizeBottom = true},
+                new SizingBox {Rect = new Rect(ResizingBoxSize, bottom, width, ResizingBoxSize), Cursor = Cursors.SizeNS, SizeBottom = true},
+                new SizingBox {Rect = new Rect(0, bottom, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNESW, SizeLeft = true, SizeBottom = true},
+                new SizingBox {Rect = new Rect(0, ResizingBoxSize, ResizingBoxSize, height), Cursor = Cursors.SizeWE, SizeLeft = true}
             };
         }
 
         private void RecalculateSizingBoxes()
         {
-            // ReSharper disable InconsistentNaming
-            var w2bs = Width - 2 * ResizingBoxSize;
-            var h2bs = Height - 2 * ResizingBoxSize;
-            // ReSharper restore InconsistentNaming
-            var wr = Width - ResizingBoxSize;
-            var hb = Height - ResizingBoxSize;
+            var innerWidth = Width - 2 * ResizingBoxSize;
+            var innerHeight = Height - 2 * ResizingBoxSize;
+            var outerWidth = Width - ResizingBoxSize;
+            var outerHeight = Height - ResizingBoxSize;
 
-            _sizingBoxes[0].Rect.Width = w2bs;
-            _sizingBoxes[0].Rect.Height = h2bs;
-            _sizingBoxes[2].Rect.Width = w2bs;
-            _sizingBoxes[3].Rect.X = wr;
-            _sizingBoxes[4].Rect.X = wr;
-            _sizingBoxes[4].Rect.Height = h2bs;
-            _sizingBoxes[5].Rect.X = wr;
-            _sizingBoxes[5].Rect.Y = hb;
-            _sizingBoxes[6].Rect.Y = hb;
-            _sizingBoxes[6].Rect.Width = w2bs;
-            _sizingBoxes[7].Rect.Y = hb;
-            _sizingBoxes[8].Rect.Height = h2bs;
+            _sizingBoxes[0].Rect.Width = innerWidth;
+            _sizingBoxes[0].Rect.Height = innerHeight;
+            _sizingBoxes[2].Rect.Width = innerWidth;
+            _sizingBoxes[3].Rect.X = outerWidth;
+            _sizingBoxes[4].Rect.X = outerWidth;
+            _sizingBoxes[4].Rect.Height = innerHeight;
+            _sizingBoxes[5].Rect.X = outerWidth;
+            _sizingBoxes[5].Rect.Y = outerHeight;
+            _sizingBoxes[6].Rect.Y = outerHeight;
+            _sizingBoxes[6].Rect.Width = innerWidth;
+            _sizingBoxes[7].Rect.Y = outerHeight;
+            _sizingBoxes[8].Rect.Height = innerHeight;
         }
 
         private void DoResizing(MouseEventArgs e)
         {
-            var newPos = e.GetPosition(this);
-            var delta = newPos - _lastClickPosition;
+            var newPosition = e.GetPosition(this);
+            var delta = newPosition - _lastClickPosition;
 
             var left = Left;
             var top = Top;
@@ -280,14 +270,14 @@ namespace MiP.Ruler
             {
                 width += delta.X;
                 if (width > MinWidth)
-                    _lastClickPosition.X = newPos.X;
+                    _lastClickPosition.X = newPosition.X;
             }
 
             if (_currentResizingBox.SizeBottom)
             {
                 height += delta.Y;
                 if (height > MinHeight)
-                    _lastClickPosition.Y = newPos.Y;
+                    _lastClickPosition.Y = newPosition.Y;
             }
 
             Left = left;
@@ -302,9 +292,9 @@ namespace MiP.Ruler
 
         private void CheckSizingBox(MouseEventArgs e)
         {
-            var pos = e.GetPosition(this);
+            var position = e.GetPosition(this);
 
-            _currentResizingBox = _sizingBoxes.FirstOrDefault(b => b.Rect.Contains(pos)) ?? _sizingBoxes[0];
+            _currentResizingBox = _sizingBoxes.FirstOrDefault(b => b.Rect.Contains(position)) ?? _sizingBoxes[0];
 
             Cursor = _currentResizingBox.Cursor;
         }

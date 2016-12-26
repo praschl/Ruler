@@ -44,9 +44,9 @@ namespace MiP.Ruler
         {
             var isLeftTop = RulerPosition == RulerPositionValues.Left || RulerPosition == RulerPositionValues.Top;
 
-            for (var pos = 0; pos < pixelCount + 2; pos += 2)
+            for (var position = 0; position < pixelCount + 2; position += 2)
             {
-                var length = GetLength(pos);
+                var length = GetLength(position);
 
                 var tick = new Line
                 {
@@ -54,31 +54,31 @@ namespace MiP.Ruler
                     StrokeThickness = 1.0
                 };
 
-                setTickPosition(tick, pos, pos, tickOffset - length, tickOffset + length);
+                setTickPosition(tick, position, position, tickOffset - length, tickOffset + length);
                 
-                if (isLeftTop && pos > 0 && pos%100 == 0)
+                if (isLeftTop && position > 0 && position%100 == 0)
                 {
-                    var tickText = new TextBlock {Text = pos.ToString("0")};
+                    var tickText = new TextBlock {Text = position.ToString("0")};
                     Children.Add(tickText);
                     tickText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
-                    setTickTextPosition(tickText, pos);
+                    setTickTextPosition(tickText, position);
                 }
                 
                 Children.Add(tick);
             }
         }
 
-        private static void SetTickTextPositionVertical(TextBlock tickText, int pos)
+        private static void SetTickTextPositionVertical(TextBlock tickText, int position)
         {
-            var top = pos - tickText.DesiredSize.Height/2;
+            var top = position - tickText.DesiredSize.Height/2;
             SetLeft(tickText, 12);
             SetTop(tickText, top);
         }
 
-        private static void SetTickTextPositionHorizontal(TextBlock tickText, int pos)
+        private static void SetTickTextPositionHorizontal(TextBlock tickText, int position)
         {
-            var left = pos - tickText.DesiredSize.Width/2;
+            var left = position - tickText.DesiredSize.Width/2;
             SetTop(tickText, 12);
             SetLeft(tickText, left);
         }

@@ -17,6 +17,7 @@ namespace MiP.Ruler
     public partial class MainWindow : INotifyPropertyChanged
     {
         private const int ResizingBoxSize = 10;
+
         private SizingBox _currentResizingBox;
         private Point _lastClickPosition;
 
@@ -42,6 +43,7 @@ namespace MiP.Ruler
         public ICommand ToggleOrientationCommand => new SwitchOrientationCommand(this, true);
         public ICommand SwitchHorizontalCommand => new SwitchOrientationCommand(this, Orientation.Horizontal);
         public ICommand SwitchVerticalCommand => new SwitchOrientationCommand(this, Orientation.Vertical);
+        public ICommand ShowAboutWindowCommand => new ShowAboutWindowCommand();
 
         public Config Config { get; } = Config.Instance;
 
@@ -172,6 +174,11 @@ namespace MiP.Ruler
             if (e.Key == Key.Down)
                 Top += pixel;
         }
+        
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            // TODO: AboutWindow.CloseWindow();
+        }
 
         public void SwitchDirection(Point pos)
         {
@@ -211,8 +218,8 @@ namespace MiP.Ruler
 
         private void RecalculateSizingBoxes()
         {
-            var innerWidth = Width - 2 * ResizingBoxSize;
-            var innerHeight = Height - 2 * ResizingBoxSize;
+            var innerWidth = Width - 2*ResizingBoxSize;
+            var innerHeight = Height - 2*ResizingBoxSize;
             var outerWidth = Width - ResizingBoxSize;
             var outerHeight = Height - ResizingBoxSize;
 
@@ -271,10 +278,10 @@ namespace MiP.Ruler
             Left = left;
             Top = top;
 
-            if (width > MinWidth && width < MaxWidth)
+            if ((width > MinWidth) && (width < MaxWidth))
                 Width = width;
 
-            if (height > MinHeight && height < MaxHeight)
+            if ((height > MinHeight) && (height < MaxHeight))
                 Height = height;
         }
 
@@ -286,7 +293,7 @@ namespace MiP.Ruler
 
             Cursor = _currentResizingBox.Cursor;
         }
-        
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

@@ -23,7 +23,8 @@
         Width="601" Height="75" MinWidth="75" MinHeight="75"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         KeyDown="MainWindow_OnKeyDown"
-        Icon="assets/icon.ico">
+        Icon="assets/icon.ico"
+        Closing="MainWindow_OnClosing">
 
     <Window.Resources>
         <converters:OrientationToVisibilityConverter x:Key="_horizontalVisibilityConverter" Orientation="Horizontal" />
@@ -44,7 +45,7 @@
                       IsChecked="{Binding Config.Orientation, Converter={StaticResource _menuOrientationConverter}, Mode=OneWay}" />
             <MenuItem Header="Clear Lines" Command="{Binding ClearRulerLinesCommand}" />
             <Separator />
-            <!--<MenuItem Header="About"></MenuItem>-->
+            <MenuItem Header="About" Command="{Binding ShowAboutWindowCommand}" />
             <MenuItem Header="Quit" Command="{Binding CloseCommand}" />
         </ContextMenu>
     </Window.ContextMenu>

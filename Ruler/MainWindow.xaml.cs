@@ -27,7 +27,6 @@ namespace MiP.Ruler
         private bool _statusDoubleClicked;
         private bool _statusResizing;
         private string _switchDirectionText;
-        private Orientation _orientation;
 
         public MainWindow()
         {
@@ -43,19 +42,8 @@ namespace MiP.Ruler
         public ICommand ToggleOrientationCommand => new SwitchOrientationCommand(this, true);
         public ICommand SwitchHorizontalCommand => new SwitchOrientationCommand(this, Orientation.Horizontal);
         public ICommand SwitchVerticalCommand => new SwitchOrientationCommand(this, Orientation.Vertical);
-        
-        public Orientation Orientation
-        {
-            get { return _orientation; }
-            set
-            {
-                if (value == _orientation) return;
-                _orientation = value;
-                OnPropertyChanged();
 
-                SwitchDirectionText = _orientation == Orientation.Horizontal ? "Switch to horizontal" : "Switch to vertical";
-            }
-        }
+        public Config Config { get; } = Config.Instance;
 
         public string SwitchDirectionText
         {
@@ -115,8 +103,8 @@ namespace MiP.Ruler
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RecalculateSizingBoxes();
-            if (!Config.Instance.LockOrientationOnResize)
-                Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
+            if (!Config.LockOrientationOnResize)
+                Config.Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
         }
 
         private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -197,7 +185,7 @@ namespace MiP.Ruler
             Width = width;
             Height = height;
 
-            Orientation = Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal;
+            Config.Orientation = Config.Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal;
         }
 
         private void InitializeSizingBoxes()

@@ -18,9 +18,12 @@ namespace MiP.Ruler
         private readonly List<RulerLine> _rulerLines = new List<RulerLine>();
 
         private RulerLine _currentLine;
+        private readonly Config _config;
 
         public RulerLineDisplay()
         {
+            _config = Config.Instance;
+
             Initialize();
 
             MouseMove += MouseMoveHandler;
@@ -77,7 +80,7 @@ namespace MiP.Ruler
 
         private void DirectionChanged()
         {
-            if (Config.Instance.ClearLinesOnOrientationChange)
+            if (_config.ClearLinesOnOrientationChange)
                 ClearRulerLines();
 
             RefreshCurrentRulerLine(Mouse.GetPosition(this));

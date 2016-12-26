@@ -30,7 +30,7 @@ namespace MiP.Ruler.Commands
 
         public void Execute(object parameter)
         {
-            if (!_toggle && _orientation == _window.Orientation)
+            if (!_toggle && _orientation == Config.Instance.Orientation)
                 return;
 
             //_window.ClearLines();

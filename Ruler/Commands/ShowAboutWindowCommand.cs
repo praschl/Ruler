@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MiP.Ruler.Commands
 {
     public class ShowAboutWindowCommand : ICommand
     {
-        private readonly MainWindow _window;
+        private readonly Window _parent;
+
+        public ShowAboutWindowCommand(Window parent)
+        {
+            _parent = parent;
+        }
 
         public bool CanExecute(object parameter)
         {
@@ -14,7 +20,7 @@ namespace MiP.Ruler.Commands
 
         public void Execute(object parameter)
         {
-            // TODO: Show About Window
+            AboutWindow.ShowSingleInstance(_parent);
         }
 
         public event EventHandler CanExecuteChanged;

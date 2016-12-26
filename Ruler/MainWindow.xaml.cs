@@ -43,7 +43,7 @@ namespace MiP.Ruler
         public ICommand ToggleOrientationCommand => new SwitchOrientationCommand(this, true);
         public ICommand SwitchHorizontalCommand => new SwitchOrientationCommand(this, Orientation.Horizontal);
         public ICommand SwitchVerticalCommand => new SwitchOrientationCommand(this, Orientation.Vertical);
-        public ICommand ShowAboutWindowCommand => new ShowAboutWindowCommand();
+        public ICommand ShowAboutWindowCommand => new ShowAboutWindowCommand(this);
 
         public Config Config { get; } = Config.Instance;
 

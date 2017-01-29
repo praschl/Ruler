@@ -16,7 +16,10 @@
         Initialized="AboutWindow_OnInitialized"
         KeyDown="AboutWindow_OnKeyDown"
         >
-
+    <Window.InputBindings>
+        <KeyBinding Key="A" Modifiers="Alt" Command="{Binding CloseCommand}" />
+    </Window.InputBindings>
+    
     <StackPanel Orientation="Vertical" Margin="10">
         <StackPanel Orientation="Horizontal">
             <Image Source="assets/icon.png" Width="64" SnapsToDevicePixels="True" />

@@ -37,6 +37,7 @@
         <KeyBinding Key="O" Command="{Binding ToggleOrientationCommand}" />
         <KeyBinding Key="H" Command="{Binding SwitchHorizontalCommand}" />
         <KeyBinding Key="V" Command="{Binding SwitchVerticalCommand}" />
+        <KeyBinding Key="A" Modifiers="Alt" Command="{Binding ShowAboutWindowCommand}" />
     </Window.InputBindings>
 
     <Window.ContextMenu>

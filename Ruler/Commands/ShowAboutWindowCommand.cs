@@ -20,7 +20,7 @@ namespace MiP.Ruler.Commands
 
         public void Execute(object parameter)
         {
-            AboutWindow.ShowSingleInstance(_parent);
+            AboutWindow.ToggleShow(_parent);
         }
 
         public event EventHandler CanExecuteChanged;

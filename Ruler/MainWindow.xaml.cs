@@ -11,7 +11,7 @@ namespace MiP.Ruler
 {
     // Yup, some parts here are event handlers, and some are commands.
     // I've used what worked better and simpler for each use case.
-    // Many things like mouseevents cant be expressed as commands properly, 
+    // Many things like mouseevents cant be expressed as commands properly
     // and some other work better as commands like Keybindings.
 
     public partial class MainWindow : INotifyPropertyChanged
@@ -177,7 +177,7 @@ namespace MiP.Ruler
         
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            // TODO: AboutWindow.CloseWindow();
+            AboutWindow.CloseWindow();
         }
 
         public void SwitchDirection(Point pos)
@@ -246,6 +246,9 @@ namespace MiP.Ruler
             var top = Top;
             var width = Width;
             var height = Height;
+
+            // TODO: needs a bit of work to improve behaviour when width/height is very close to minimum/maximum
+            // when starting resize, get screen position of mouse, and change resizing code to use screen position
 
             if (_currentResizingBox.SizeLeft)
             {

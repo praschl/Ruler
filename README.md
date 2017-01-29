@@ -19,12 +19,19 @@ Mousewheel to change transparency.
 
 ## Keyboard
 
+### Ruler window
 C ... to clear the lines.
 O ... to toggle between horizontal and vertical orientation
 H ... switch to horizontal orientation
 V ... switch to vertical orientation
 
+Alt-A ... About Window
+
 Alt-F4 ... quit.
+
+### About window
+ESC ... Close about window
+Alt-A ... Close about window
 
 ## Not implemented yet, but planned
 

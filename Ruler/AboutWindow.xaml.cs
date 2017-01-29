@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using MiP.Ruler.Commands;
 
 namespace MiP.Ruler
 {
@@ -17,8 +19,17 @@ namespace MiP.Ruler
 
         public string Version => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-        public static void ShowSingleInstance(Window parent)
+        public ICommand CloseCommand => new CloseCommand(this);
+
+        public static void ToggleShow(Window parent)
         {
+            if (_window != null)
+            {
+                CloseWindow();
+                return;
+            }
+
+            // else show window
             if (_window == null)
             {
                 _window = new AboutWindow();
@@ -28,10 +39,29 @@ namespace MiP.Ruler
             _window.BringIntoView();
             _window.Activate();
 
-            // TODO: Place about window somewhere nice depending on enough space: 
-            // above ruler h-center
-            // below ruler h-center
-            // h-center v-center
+            if (Config.Instance.Orientation == Orientation.Horizontal)
+            {
+                _window.Left = parent.Left + (parent.Width/2 - _window.Width/2);
+
+                if (parent.Top > _window.Height)
+                    _window.Top = parent.Top - _window.Height;
+                else
+                    _window.Top = parent.Top + parent.Height;
+            }
+            else
+            {
+                _window.Top = parent.Top + (parent.Height / 2 - _window.Height / 2);
+
+                if (parent.Left > _window.Width)
+                    _window.Left = parent.Left - _window.Width;
+                else
+                    _window.Left = parent.Left + parent.Width;
+            }
+        }
+
+        public static void CloseWindow()
+        {
+            _window?.Close();
         }
 
         private void AboutWindow_OnClosed(object sender, EventArgs e)

@@ -20,18 +20,17 @@ Mousewheel to change transparency.
 ## Keyboard
 
 ### Ruler window
-C ... to clear the lines.
-O ... to toggle between horizontal and vertical orientation
-H ... switch to horizontal orientation
-V ... switch to vertical orientation
-
-Alt-A ... About Window
-
-Alt-F4 ... quit.
+* C ... clear the lines.
+* O ... toggle between horizontal and vertical orientation
+* H ... switch to horizontal orientation
+* V ... switch to vertical orientation
+* P ... toggle between pixel and percentages
+* Alt-A ... About Window
+* Alt-F4 ... quit.
 
 ### About window
-ESC ... Close about window
-Alt-A ... Close about window
+* ESC ... Close about window
+* Alt-A ... Close about window
 
 ## Not implemented yet, but planned
 
@@ -39,7 +38,7 @@ Lots of settings
 
 ## Download
 
-Download [Ruler v0.2](https://praschl.github.com/Ruler/Ruler.zip)
+Download [Ruler v0.3](https://praschl.github.com/Ruler/Ruler.zip)
 
 Some Virus Scanners currently seem to detect the "HEUR/QVM03.0.0000.Malware.Gen" on the executable in the zip file. However, http://stackoverflow.com/questions/33998715/visual-studio-2015-community-trojan-heur-qvm03-0-malware-gen states, that this scanner just flags even the most simple windows forms applications with this malware, all being false positives.
 

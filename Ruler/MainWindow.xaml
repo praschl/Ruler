@@ -20,7 +20,7 @@
         SizeChanged="MainWindow_SizeChanged"
         ResizeMode="NoResize"
         Title="Ruler"
-        Width="601" Height="75" MinWidth="75" MinHeight="75"
+        Width="600" Height="75" MinWidth="75" MinHeight="75"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         KeyDown="MainWindow_OnKeyDown"
         Icon="assets/icon.ico"
@@ -38,12 +38,17 @@
         <KeyBinding Key="H" Command="{Binding SwitchHorizontalCommand}" />
         <KeyBinding Key="V" Command="{Binding SwitchVerticalCommand}" />
         <KeyBinding Key="A" Modifiers="Alt" Command="{Binding ShowAboutWindowCommand}" />
+        <KeyBinding Key="P" Command="{Binding TogglePercentageCommand}" />
     </Window.InputBindings>
 
     <Window.ContextMenu>
         <ContextMenu>
             <MenuItem Header="Vertical" Command="{Binding ToggleOrientationCommand}" IsCheckable="True"
                       IsChecked="{Binding Config.Orientation, Converter={StaticResource _menuOrientationConverter}, Mode=OneWay}" />
+            
+            <MenuItem Header="Show percentages" Command="{Binding TogglePercentageCommand}" IsCheckable="True" 
+                      IsChecked="{Binding Config.ShowPercentages, Mode=OneWay}" />
+            
             <MenuItem Header="Clear Lines" Command="{Binding ClearRulerLinesCommand}" />
             <Separator />
             <MenuItem Header="About" Command="{Binding ShowAboutWindowCommand}" />

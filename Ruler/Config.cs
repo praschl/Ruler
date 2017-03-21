@@ -10,6 +10,7 @@ namespace MiP.Ruler
         private bool _clearLinesOnOrientationChange;
         private bool _lockOrientationOnResize = true;
         private Orientation _vertical = Orientation.Horizontal;
+        private bool _showPercentages;
 
         public static Config Instance { get; } = GetInstance();
 
@@ -42,6 +43,17 @@ namespace MiP.Ruler
             {
                 if (value == _vertical) return;
                 _vertical = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ShowPercentages
+        {
+            get { return _showPercentages; }
+            set
+            {
+                if (value == _showPercentages) return;
+                _showPercentages = value;
                 OnPropertyChanged();
             }
         }

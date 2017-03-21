@@ -54,7 +54,7 @@ namespace MiP.Ruler
                     StrokeThickness = 1.0
                 };
 
-                setTickPosition(tick, position, position, tickOffset - length, tickOffset + length);
+                setTickPosition(tick, position-1, position-1, tickOffset - length, tickOffset + length);
                 
                 if (isLeftTop && position > 0 && position%100 == 0)
                 {
@@ -62,7 +62,7 @@ namespace MiP.Ruler
                     Children.Add(tickText);
                     tickText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
-                    setTickTextPosition(tickText, position);
+                    setTickTextPosition(tickText, position-1);
                 }
                 
                 Children.Add(tick);

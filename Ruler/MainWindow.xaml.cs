@@ -27,7 +27,7 @@ namespace MiP.Ruler
         private SizingBox[] _sizingBoxes;
         private bool _statusDoubleClicked;
         private bool _statusResizing;
-        private string _switchDirectionText;
+        private bool _showPercentages;
 
         public MainWindow()
         {
@@ -45,24 +45,20 @@ namespace MiP.Ruler
         public ICommand SwitchVerticalCommand => new SwitchOrientationCommand(this, Orientation.Vertical);
         public ICommand ShowAboutWindowCommand => new ShowAboutWindowCommand(this);
 
+        public ICommand TogglePercentageCommand => new TogglePercentageCommand(this);
+
         public Config Config { get; } = Config.Instance;
-
-        public string SwitchDirectionText
-        {
-            get { return _switchDirectionText; }
-            set
-            {
-                if (value == _switchDirectionText) return;
-                _switchDirectionText = value;
-                OnPropertyChanged();
-            }
-        }
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void ClearLines()
         {
             _rulerLineDisplay.ClearRulerLines();
+        }
+
+        public void TogglePercentages()
+        {
+            _rulerLineDisplay.TogglePercentages();
         }
 
         private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
@@ -107,6 +103,7 @@ namespace MiP.Ruler
             RecalculateSizingBoxes();
             if (!Config.LockOrientationOnResize)
                 Config.Orientation = Width > Height ? Orientation.Horizontal : Orientation.Vertical;
+            _rulerLineDisplay.ParentSizeChanged();
         }
 
         private void MainWindow_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

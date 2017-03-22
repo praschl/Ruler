@@ -1,18 +1,42 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using MiP.Ruler.Annotations;
+using Newtonsoft.Json;
 
 namespace MiP.Ruler
 {
     public class Config : INotifyPropertyChanged
     {
+        private static string _configPath;
+        private static string _configFile;
         private bool _clearLinesOnOrientationChange;
         private bool _lockOrientationOnResize = true;
-        private Orientation _vertical = Orientation.Horizontal;
+        private Orientation _orientation = Orientation.Horizontal;
         private bool _showPercentages;
+        private double _windowLeft = 100;
+        private double _windowTop = 100;
+        private double _windowWidth= 600;
+        private double _windowHeight = 75;
 
         public static Config Instance { get; } = GetInstance();
+
+        public static string ConfigFile
+        {
+            get
+            {
+                _configPath = _configPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Ruler");
+
+                if (!Directory.Exists(_configPath))
+                    Directory.CreateDirectory(_configPath);
+
+                _configFile = _configFile ?? Path.Combine(_configPath, "Ruler.json");
+
+                return _configFile;
+            }
+        }
 
         public bool ClearLinesOnOrientationChange
         {
@@ -38,11 +62,11 @@ namespace MiP.Ruler
 
         public Orientation Orientation
         {
-            get { return _vertical; }
+            get { return _orientation; }
             set
             {
-                if (value == _vertical) return;
-                _vertical = value;
+                if (value == _orientation) return;
+                _orientation = value;
                 OnPropertyChanged();
             }
         }
@@ -58,17 +82,76 @@ namespace MiP.Ruler
             }
         }
 
+        public double WindowLeft
+        {
+            get { return _windowLeft; }
+            set
+            {
+                if (value.Equals(_windowLeft)) return;
+                _windowLeft = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double WindowTop
+        {
+            get { return _windowTop; }
+            set
+            {
+                if (value.Equals(_windowTop)) return;
+                _windowTop = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double WindowWidth
+        {
+            get { return _windowWidth; }
+            set
+            {
+                if (value.Equals(_windowWidth)) return;
+                _windowWidth = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double WindowHeight
+        {
+            get { return _windowHeight; }
+            set
+            {
+                if (value.Equals(_windowHeight)) return;
+                _windowHeight = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Opacity { get; set; } = 1.0;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private static Config GetInstance()
         {
-            // TODO: Load config
-            return new Config();
+            var config = LoadJson();
+
+            return config ?? new Config();
+        }
+
+        private static Config LoadJson()
+        {
+            if (!File.Exists(ConfigFile))
+                return null;
+
+            var json = File.ReadAllText(ConfigFile);
+
+            return JsonConvert.DeserializeObject<Config>(json);
         }
 
         public void Save()
         {
-            // TODO: Save config
+            var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+
+            File.WriteAllText(ConfigFile, json);
         }
 
         [NotifyPropertyChangedInvocator]

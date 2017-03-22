@@ -13,7 +13,7 @@
 // - "Rote Linie" deaktivieren
 // - Größe des Sizing Grip
 
-// Settings (auch Größe + Position) beim Beenden speichern
+// Settings nach dem Laden validieren und ggf bessere Werte setzen.
 
 // Systray Icon + Hotkey
 

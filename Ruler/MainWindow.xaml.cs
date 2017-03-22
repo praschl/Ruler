@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -58,6 +59,28 @@ namespace MiP.Ruler
         public void TogglePercentages()
         {
             _rulerLineDisplay.TogglePercentages();
+        }
+
+        private void MainWindow_OnInitialized(object sender, EventArgs e)
+        {
+            Left = Config.WindowLeft;
+            Top = Config.WindowTop;
+            Width = Config.WindowWidth;
+            Height = Config.WindowHeight;
+
+            Opacity = Config.Opacity;
+        }
+        
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            Config.WindowLeft = Left;
+            Config.WindowTop = Top;
+            Config.WindowWidth = Width;
+            Config.WindowHeight = Height;
+
+            Config.Opacity = Opacity;
+
+            Config.Save();
         }
 
         private void MainWindow_OnMouseEnter(object sender, MouseEventArgs e)
@@ -140,8 +163,8 @@ namespace MiP.Ruler
 
             if (newOpacity > 1.0)
                 newOpacity = 1.0;
-            if (newOpacity < 0.1)
-                newOpacity = 0.1;
+            if (newOpacity < 0.2)
+                newOpacity = 0.2;
 
             Opacity = newOpacity;
         }

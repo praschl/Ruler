@@ -42,7 +42,7 @@ namespace MiP.Ruler
             get { return (Orientation) GetValue(OrientationProperty); }
             set { SetValue(OrientationProperty, value); }
         }
-        
+
         public void AddNewRulerLine(Point position)
         {
             _rulerLines.Add(new RulerLine(this, position));

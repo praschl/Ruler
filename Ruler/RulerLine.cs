@@ -13,6 +13,9 @@ namespace MiP.Ruler
         private readonly Line _line;
         private readonly TextBlock _textBlock;
 
+        private readonly Brush _colorRed = Brushes.Crimson;
+        private readonly Brush _colorBlue = Brushes.MediumBlue;
+
         public RulerLine(RulerLineDisplay display, Point position)
         {
             Position = position;
@@ -20,7 +23,7 @@ namespace MiP.Ruler
 
             _line = new Line
             {
-                Stroke = Brushes.Crimson,
+                Stroke = _colorRed,
                 StrokeThickness = 1.0
             };
 
@@ -28,7 +31,7 @@ namespace MiP.Ruler
 
             _textBlock = new TextBlock
             {
-                Foreground = Brushes.Crimson
+                Foreground = _colorRed
             };
 
             _display.Children.Add(_textBlock);
@@ -57,9 +60,21 @@ namespace MiP.Ruler
             }
         }
 
+        public bool Visible { get; set; } = true;
+
         public void SetVisible(bool visible)
         {
-            Brush color = visible ? Brushes.Crimson : Brushes.Transparent;
+            Visible = visible;
+
+            SetColor();
+        }
+
+        private void SetColor()
+        {
+            var color = Visible 
+                ? (_display.ShowPercentages ? _colorBlue :_colorRed)
+                : Brushes.Transparent;
+
             _line.Stroke = color;
             _textBlock.Foreground = color;
         }
@@ -79,7 +94,7 @@ namespace MiP.Ruler
 
         public void RefreshText()
         {
-            RefreshText(Position);
+            RefreshTextAndColor(Position);
         }
 
         public void MoveLineTo(Point position)
@@ -90,7 +105,7 @@ namespace MiP.Ruler
                 _line.Y1 = 1;
                 _line.Y2 = _display.ActualHeight - 2;
 
-                RefreshText(position);
+                RefreshTextAndColor(position);
             }
             else
             {
@@ -98,14 +113,16 @@ namespace MiP.Ruler
                 _line.X1 = 1;
                 _line.X2 = _display.ActualWidth - 2;
 
-                RefreshText(position);
+                RefreshTextAndColor(position);
             }
 
             Position = position;
         }
 
-        private void RefreshText(Point position)
+        private void RefreshTextAndColor(Point position)
         {
+            SetColor();
+
             if (_display.Orientation == Orientation.Horizontal)
             {
                 _textBlock.Text = Format(position.X + 1);
@@ -135,7 +152,7 @@ namespace MiP.Ruler
             var divisor = _display.Orientation == Orientation.Horizontal ? _display.ActualWidth : _display.ActualHeight;
 
             if (_display.ShowPercentages)
-                return (position/divisor*100).ToString("0.0");
+                return (position/divisor*100).ToString("0.0")+"%";
 
             return position.ToString("0");
         }

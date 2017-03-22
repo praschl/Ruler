@@ -23,8 +23,7 @@
         Width="600" Height="75" MinWidth="75" MinHeight="75"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         KeyDown="MainWindow_OnKeyDown"
-        Icon="assets/icon.ico"
-        Closing="MainWindow_OnClosing">
+        Icon="assets/icon.ico">
 
     <Window.Resources>
         <converters:OrientationToVisibilityConverter x:Key="_horizontalVisibilityConverter" Orientation="Horizontal" />

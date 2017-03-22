@@ -27,7 +27,6 @@ namespace MiP.Ruler
         private SizingBox[] _sizingBoxes;
         private bool _statusDoubleClicked;
         private bool _statusResizing;
-        private bool _showPercentages;
 
         public MainWindow()
         {
@@ -43,7 +42,7 @@ namespace MiP.Ruler
         public ICommand ToggleOrientationCommand => new SwitchOrientationCommand(this, true);
         public ICommand SwitchHorizontalCommand => new SwitchOrientationCommand(this, Orientation.Horizontal);
         public ICommand SwitchVerticalCommand => new SwitchOrientationCommand(this, Orientation.Vertical);
-        public ICommand ShowAboutWindowCommand => new ShowAboutWindowCommand(this);
+        public ICommand ShowAboutWindowCommand => new ShowAboutWindowCommand();
 
         public ICommand TogglePercentageCommand => new TogglePercentageCommand(this);
 
@@ -172,11 +171,6 @@ namespace MiP.Ruler
                 Top += pixel;
         }
         
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
-        {
-            AboutWindow.CloseWindow();
-        }
-
         public void SwitchDirection(Point pos)
         {
             var left = Left + pos.X - pos.Y;

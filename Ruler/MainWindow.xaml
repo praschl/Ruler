@@ -31,6 +31,7 @@
         <converters:OrientationToVisibilityConverter x:Key="_horizontalVisibilityConverter" Orientation="Horizontal" />
         <converters:OrientationToVisibilityConverter x:Key="_verticalVisibilityConverter" Orientation="Vertical" />
         <converters:OrientationToBooleanConverter x:Key="_menuOrientationConverter" />
+        <converters:OrientationToMarginConverter x:Key="_orientationMarginConverter" />
     </Window.Resources>
 
     <Window.InputBindings>
@@ -58,20 +59,23 @@
     </Window.ContextMenu>
 
     <Grid>
-        <Canvas Background="White" />
-        <DockPanel LastChildFill="False">
+        <Canvas Background="White" Margin="{Binding Config.Orientation, Converter={StaticResource _orientationMarginConverter}}" />
+
+        <DockPanel LastChildFill="False" Margin="{Binding Config.Orientation, Converter={StaticResource _orientationMarginConverter}}" ClipToBounds="True">
             <ruler:RulerTicksDisplay RulerPosition="Top" DockPanel.Dock="Top" Height="30"
                                      Visibility="{Binding Config.Orientation, Converter={StaticResource _horizontalVisibilityConverter}}" />
             <ruler:RulerTicksDisplay RulerPosition="Bottom" DockPanel.Dock="Bottom" Height="15"
                                      Visibility="{Binding Config.Orientation, Converter={StaticResource _horizontalVisibilityConverter}}" />
         </DockPanel>
-        <DockPanel LastChildFill="False">
+
+        <DockPanel LastChildFill="False" Margin="{Binding Config.Orientation, Converter={StaticResource _orientationMarginConverter}}" ClipToBounds="True">
             <ruler:RulerTicksDisplay RulerPosition="Left" DockPanel.Dock="Left" Width="30"
                                      Visibility="{Binding Config.Orientation, Converter={StaticResource _verticalVisibilityConverter}}" />
             <ruler:RulerTicksDisplay RulerPosition="Right" DockPanel.Dock="Right" Width="30"
                                      Visibility="{Binding Config.Orientation, Converter={StaticResource _verticalVisibilityConverter}}" />
         </DockPanel>
-        <ruler:RulerBorder />
+
+        <ruler:RulerBorder Margin="{Binding Config.Orientation, Converter={StaticResource _orientationMarginConverter}}" />
         <ruler:RulerLineDisplay x:Name="_rulerLineDisplay" Background="Transparent"
                                 Orientation="{Binding Config.Orientation}" />
     </Grid>

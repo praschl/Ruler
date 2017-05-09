@@ -48,7 +48,10 @@ namespace MiP.Ruler
         public ICommand TogglePercentageCommand => new TogglePercentageCommand(this);
 
         public Config Config { get; } = Config.Instance;
-        
+
+        // TODO: proper resizing with big margin
+        // TODO: change margin orientation.
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void ClearLines()
@@ -70,7 +73,7 @@ namespace MiP.Ruler
 
             Opacity = Config.Opacity;
         }
-        
+
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             Config.WindowLeft = Left;
@@ -193,7 +196,7 @@ namespace MiP.Ruler
             if (e.Key == Key.Down)
                 Top += pixel;
         }
-        
+
         public void SwitchDirection(Point pos)
         {
             var left = Left + pos.X - pos.Y;
@@ -211,8 +214,8 @@ namespace MiP.Ruler
 
         private void InitializeSizingBoxes()
         {
-            var width = Width - 2*ResizingBoxSize; // width of middle boxes (top, center, bottom)
-            var height = Height - 2*ResizingBoxSize; // height of middle boxes (left, middle right)
+            var width = Width - 2 * ResizingBoxSize; // width of middle boxes (top, center, bottom)
+            var height = Height - 2 * ResizingBoxSize; // height of middle boxes (left, middle right)
             var right = Width - ResizingBoxSize; // x of right boxes (right-top, right-middle, right-bottom)
             var bottom = Height - ResizingBoxSize; // y of bottom boxes (left-bottom, middle-bottom, right-bottom)
 
@@ -232,8 +235,8 @@ namespace MiP.Ruler
 
         private void RecalculateSizingBoxes()
         {
-            var innerWidth = Width - 2*ResizingBoxSize;
-            var innerHeight = Height - 2*ResizingBoxSize;
+            var innerWidth = Width - 2 * ResizingBoxSize;
+            var innerHeight = Height - 2 * ResizingBoxSize;
             var outerWidth = Width - ResizingBoxSize;
             var outerHeight = Height - ResizingBoxSize;
 

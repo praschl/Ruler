@@ -76,6 +76,7 @@
     <Compile Include="Commands\ShowAboutWindowCommand.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Converters\OrientationToBooleanConverter.cs" />
+    <Compile Include="Converters\OrientationToMarginConverter.cs" />
     <Compile Include="Converters\OrientationToVisibilityConverter.cs" />
     <Compile Include="RulerBorder.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />

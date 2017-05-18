@@ -10,10 +10,13 @@ namespace MiP.Ruler.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.Equals(Orientation.Horizontal))
-                return new Thickness(0, 20, 0, 20);
+            const int Overlength = 20;
 
-            return new Thickness(20, 0, 20, 0);
+            // TODO: turn the constant Overlength into a property on the window.
+            if (value.Equals(Orientation.Horizontal))
+                return new Thickness(0, Overlength, 0, Overlength);
+
+            return new Thickness(Overlength, 0, Overlength, 0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

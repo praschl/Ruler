@@ -49,9 +49,6 @@ namespace MiP.Ruler
 
         public Config Config { get; } = Config.Instance;
 
-        // TODO: proper resizing with big margin
-        // TODO: change margin orientation.
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void ClearLines()
@@ -204,54 +201,51 @@ namespace MiP.Ruler
             var width = Height;
             var height = Width;
 
+            // switch direction must be done before resizing, since the resizing-rects calculation depends on correctly set orientation.
+            Config.Orientation = Config.Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal;
+
             Left = left;
             Top = top;
             Width = width;
             Height = height;
-
-            Config.Orientation = Config.Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal;
         }
 
         private void InitializeSizingBoxes()
         {
-            var width = Width - 2 * ResizingBoxSize; // width of middle boxes (top, center, bottom)
-            var height = Height - 2 * ResizingBoxSize; // height of middle boxes (left, middle right)
-            var right = Width - ResizingBoxSize; // x of right boxes (right-top, right-middle, right-bottom)
-            var bottom = Height - ResizingBoxSize; // y of bottom boxes (left-bottom, middle-bottom, right-bottom)
-
             _sizingBoxes = new[]
             {
-                new SizingBox {Rect = new Rect(ResizingBoxSize, ResizingBoxSize, width, height), Cursor = Cursors.Arrow}, // center
-                new SizingBox {Rect = new Rect(0, 0, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNWSE, SizeLeft = true, SizeTop = true},
-                new SizingBox {Rect = new Rect(ResizingBoxSize, 0, width, ResizingBoxSize), Cursor = Cursors.SizeNS, SizeTop = true},
-                new SizingBox {Rect = new Rect(right, 0, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNESW, SizeRight = true, SizeTop = true},
-                new SizingBox {Rect = new Rect(right, ResizingBoxSize, ResizingBoxSize, height), Cursor = Cursors.SizeWE, SizeRight = true},
-                new SizingBox {Rect = new Rect(right, bottom, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNWSE, SizeRight = true, SizeBottom = true},
-                new SizingBox {Rect = new Rect(ResizingBoxSize, bottom, width, ResizingBoxSize), Cursor = Cursors.SizeNS, SizeBottom = true},
-                new SizingBox {Rect = new Rect(0, bottom, ResizingBoxSize, ResizingBoxSize), Cursor = Cursors.SizeNESW, SizeLeft = true, SizeBottom = true},
-                new SizingBox {Rect = new Rect(0, ResizingBoxSize, ResizingBoxSize, height), Cursor = Cursors.SizeWE, SizeLeft = true}
+                new SizingBox {Rect = new Rect(0, 0, 0, 0), Cursor = Cursors.Arrow}, // center
+                new SizingBox {Rect = new Rect(0, 0, 0, 0), Cursor = Cursors.SizeNWSE, SizeLeft = true, SizeTop = true},
+                new SizingBox {Rect = new Rect(0, 0, 0, 0), Cursor = Cursors.SizeNS, SizeTop = true},
+                new SizingBox {Rect = new Rect(0, 0, 0, 0), Cursor = Cursors.SizeNESW, SizeRight = true, SizeTop = true},
+                new SizingBox {Rect = new Rect(0, 0, 0, 0), Cursor = Cursors.SizeWE, SizeRight = true},
+                new SizingBox {Rect = new Rect(0, 0, 0, 0), Cursor = Cursors.SizeNWSE, SizeRight = true, SizeBottom = true},
+                new SizingBox {Rect = new Rect(0, 0, 0, 0), Cursor = Cursors.SizeNS, SizeBottom = true},
+                new SizingBox {Rect = new Rect(0, 0, 0, 0), Cursor = Cursors.SizeNESW, SizeLeft = true, SizeBottom = true},
+                new SizingBox {Rect = new Rect(0, 0, 0, 0), Cursor = Cursors.SizeWE, SizeLeft = true}
             };
         }
 
         private void RecalculateSizingBoxes()
         {
-            var innerWidth = Width - 2 * ResizingBoxSize;
-            var innerHeight = Height - 2 * ResizingBoxSize;
-            var outerWidth = Width - ResizingBoxSize;
-            var outerHeight = Height - ResizingBoxSize;
+            var b = ResizingBoxSize;
 
-            _sizingBoxes[0].Rect.Width = innerWidth;
-            _sizingBoxes[0].Rect.Height = innerHeight;
-            _sizingBoxes[2].Rect.Width = innerWidth;
-            _sizingBoxes[3].Rect.X = outerWidth;
-            _sizingBoxes[4].Rect.X = outerWidth;
-            _sizingBoxes[4].Rect.Height = innerHeight;
-            _sizingBoxes[5].Rect.X = outerWidth;
-            _sizingBoxes[5].Rect.Y = outerHeight;
-            _sizingBoxes[6].Rect.Y = outerHeight;
-            _sizingBoxes[6].Rect.Width = innerWidth;
-            _sizingBoxes[7].Rect.Y = outerHeight;
-            _sizingBoxes[8].Rect.Height = innerHeight;
+            var dx = Config.Orientation == Orientation.Horizontal ? 0 : 20;
+            var dy = Config.Orientation == Orientation.Horizontal ? 20 : 0;
+
+            // coords and size of center box (move window, no resize)
+            var w = Width - 2 * b -2*dx;
+            var h = Height - 2 * b -2*dy;
+            
+            _sizingBoxes[0].Rect = new Rect(dx+b  , dy+b  , w, h);        // center
+            _sizingBoxes[1].Rect = new Rect(dx    , dy    , b, b);        // top left
+            _sizingBoxes[2].Rect = new Rect(dx+b  , dy    , w, b);        // top
+            _sizingBoxes[3].Rect = new Rect(dx+b+w, dy    , b, b);        // top right
+            _sizingBoxes[4].Rect = new Rect(dx+b+w, dy+b  , b, h);        // right
+            _sizingBoxes[5].Rect = new Rect(dx+b+w, dy+b+h, b, b);        // right bottom
+            _sizingBoxes[6].Rect = new Rect(dx+b  , dy+b+h, w, b);        // bottom
+            _sizingBoxes[7].Rect = new Rect(dx    , dy+b+h, b, b);        // bottom left
+            _sizingBoxes[8].Rect = new Rect(dx    , dy+b  , b, h);        // left
         }
 
         private void DoResizing(MouseEventArgs e)

@@ -22,7 +22,7 @@
         Closing="MainWindow_OnClosing"
         ResizeMode="NoResize"
         Title="Ruler"
-        Width="600" Height="200" MinWidth="75" MinHeight="75"
+        Width="600" Height="200" MinWidth="100" MinHeight="100"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         KeyDown="MainWindow_OnKeyDown"
         Icon="assets/icon.ico">

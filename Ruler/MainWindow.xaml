@@ -40,6 +40,7 @@
         <KeyBinding Key="V" Command="{Binding SwitchVerticalCommand}" />
         <KeyBinding Key="A" Modifiers="Alt" Command="{Binding ShowAboutWindowCommand}" />
         <KeyBinding Key="P" Command="{Binding TogglePercentageCommand}" />
+        <KeyBinding Key="R" Command="{Binding ToggleRelativeDisplayCommand}" />
     </Window.InputBindings>
 
     <Window.ContextMenu>
@@ -49,7 +50,9 @@
             
             <MenuItem Header="Show percentages" Command="{Binding TogglePercentageCommand}" IsCheckable="True" 
                       IsChecked="{Binding Config.ShowPercentages, Mode=OneWay}" />
-            
+            <MenuItem Header="Relative values" Command="{Binding ToggleRelativeDisplayCommand}" IsCheckable="True"
+                      IsChecked="{Binding Config.RelativeDisplay, Mode=OneWay}" />
+
             <MenuItem Header="Clear Lines" Command="{Binding ClearRulerLinesCommand}" />
             <Separator />
             <MenuItem Header="About" Command="{Binding ShowAboutWindowCommand}" />

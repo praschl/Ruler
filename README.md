@@ -27,6 +27,7 @@ Mousewheel to change transparency.
 * H ... switch to horizontal orientation
 * V ... switch to vertical orientation
 * P ... toggle between pixel and percentages
+* R ... toggle between absolute and relative values
 * Alt-A ... About (go to github page)
 * Alt-F4 ... quit.
 

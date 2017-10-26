@@ -74,6 +74,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ShowAboutWindowCommand.cs" />
+    <Compile Include="Commands\ToggleRelativeDisplayCommand.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Converters\OrientationToBooleanConverter.cs" />
     <Compile Include="Converters\OrientationToVisibilityConverter.cs" />

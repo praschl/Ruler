@@ -44,6 +44,7 @@ namespace MiP.Ruler
         public ICommand SwitchHorizontalCommand => new SwitchOrientationCommand(this, Orientation.Horizontal);
         public ICommand SwitchVerticalCommand => new SwitchOrientationCommand(this, Orientation.Vertical);
         public ICommand ShowAboutWindowCommand => new ShowAboutWindowCommand();
+        public ICommand ToggleRelativeDisplayCommand => new ToggleRelativeDisplayCommand(this);
 
         public ICommand TogglePercentageCommand => new TogglePercentageCommand(this);
 
@@ -59,6 +60,11 @@ namespace MiP.Ruler
         public void TogglePercentages()
         {
             _rulerLineDisplay.TogglePercentages();
+        }
+        
+        public void ToggleRelativeDisplay()
+        {
+            _rulerLineDisplay.ToggleRelativeDisplay();
         }
 
         private void MainWindow_OnInitialized(object sender, EventArgs e)
@@ -316,7 +322,7 @@ namespace MiP.Ruler
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
+        
         private class SizingBox
         {
             public Cursor Cursor;

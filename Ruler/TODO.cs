@@ -1,8 +1,4 @@
-﻿// draw measuring between multiple lines
-// draw a blue box between lines, with size inside (outside if too small)
-// maybe draw the box only when mouseover
-
-// When resizing keep % distance between lines
+﻿// When resizing keep % distance between lines
 
 // Let user drag origin from (0,0) requires drawing negative part of ruler
 

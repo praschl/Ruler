@@ -3,7 +3,7 @@ using System.Windows;
 
 [assembly: AssemblyTitle("Ruler")]
 [assembly: AssemblyProduct("Ruler")]
-[assembly: AssemblyCopyright("Copyright © Michael Praschl 2016")]
+[assembly: AssemblyCopyright("Copyright © Michael Praschl 2017")]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //Speicherort der designspezifischen Ressourcenwörterbücher
@@ -14,6 +14,6 @@ using System.Windows;
                                               // designspezifischen Ressourcenwörterbuch nicht gefunden werden kann.)
 )]
 
-[assembly: AssemblyVersion("0.3.0.0")]
-[assembly: AssemblyFileVersion("0.3.0.0")]
-[assembly: AssemblyInformationalVersion("0.3.0.0")]
+[assembly: AssemblyVersion("0.5.0.0")]
+[assembly: AssemblyFileVersion("0.5.0.0")]
+[assembly: AssemblyInformationalVersion("0.5.0.0")]

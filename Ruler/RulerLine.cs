@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -159,13 +160,13 @@ namespace MiP.Ruler
             {
                 double previous = 0;
 
-                foreach (var line in _display.RulerLines)
+                foreach (var line in _display.RulerLines.Where(l => l.Visible))
                 {
                     var linePos = _display.Orientation == Orientation.Horizontal ? line.Position.X : line.Position.Y;
 
                     if (linePos > previous && linePos < position)
                         previous = linePos;
-                }                
+                }
 
                 position = position - previous;
             }

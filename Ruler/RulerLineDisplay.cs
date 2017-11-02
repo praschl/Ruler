@@ -61,6 +61,8 @@ namespace MiP.Ruler
         public void SetCurrentVisible(bool visible)
         {
             _currentLine.SetVisible(visible);
+            foreach (var line in _rulerLines)
+                line.RefreshText();
         }
 
         public void RemoveLast()

@@ -20,6 +20,7 @@ namespace MiP.Ruler
         private double _windowTop = 100;
         private double _windowWidth= 600;
         private double _windowHeight = 75;
+        private bool _relativeDisplay;
 
         public static Config Instance { get; } = GetInstance();
 
@@ -122,6 +123,17 @@ namespace MiP.Ruler
             {
                 if (value.Equals(_windowHeight)) return;
                 _windowHeight = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool RelativeDisplay
+        {
+            get => _relativeDisplay;
+            set
+            {
+                if (value.Equals(_relativeDisplay)) return;
+                _relativeDisplay = value;
                 OnPropertyChanged();
             }
         }

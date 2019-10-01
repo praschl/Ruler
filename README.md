@@ -4,9 +4,9 @@
 
 This application creates a Ruler on your screen which you can move around and use it to measure pixels. You can drag it around, size it, display additional lines or change its transparency.
 
-![Image of Ruler with lines](https://praschl.github.io/Ruler/Ruler_norm.png)
+![Image of Ruler with lines](/docs/Ruler_norm.png)
 
-![Image of Ruler with lines](https://praschl.github.io/Ruler/Ruler_percent.png)
+![Image of Ruler with lines](/docs/Ruler_percent.png)
 
 ## Actions
 

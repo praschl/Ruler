@@ -42,3 +42,6 @@ Lots of settings
 ## Download
 
 For download go to [Releases](https://github.com/praschl/Ruler/releases)
+
+## License
+[MIT LICENSE](LICENSE)

@@ -1,0 +1,85 @@
+﻿<Window x:Class="MiP.Ruler.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ruler="clr-namespace:MiP.Ruler"
+        xmlns:converters="clr-namespace:MiP.Ruler.Converters"
+        mc:Ignorable="d"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        SnapsToDevicePixels="True"
+        Initialized="MainWindow_OnInitialized"
+        MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
+        MouseLeftButtonUp="MainWindow_MouseLeftButtonUp"
+        MouseDoubleClick="MainWindow_OnMouseDoubleClick"
+        MouseWheel="MainWindow_OnMouseWheel"
+        MouseMove="MainWindow_MouseMove"
+        MouseEnter="MainWindow_OnMouseEnter"
+        MouseLeave="MainWindow_OnMouseLeave"
+        SizeChanged="MainWindow_SizeChanged"
+        Closing="MainWindow_OnClosing"
+        ResizeMode="NoResize"
+        Title="Ruler"
+        Width="600" Height="200" MinWidth="100" MinHeight="100"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        KeyDown="MainWindow_OnKeyDown"
+        Icon="assets/icon.ico">
+
+    <Window.Resources>
+        <converters:OrientationToVisibilityConverter x:Key="_horizontalVisibilityConverter" Orientation="Horizontal" />
+        <converters:OrientationToVisibilityConverter x:Key="_verticalVisibilityConverter" Orientation="Vertical" />
+        <converters:OrientationToBooleanConverter x:Key="_menuOrientationConverter" />
+        <converters:OrientationToMarginConverter x:Key="_orientationMarginConverter" />
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="C" Command="{Binding ClearRulerLinesCommand}" />
+        <KeyBinding Key="O" Command="{Binding ToggleOrientationCommand}" />
+        <KeyBinding Key="H" Command="{Binding SwitchHorizontalCommand}" />
+        <KeyBinding Key="V" Command="{Binding SwitchVerticalCommand}" />
+        <KeyBinding Key="A" Modifiers="Alt" Command="{Binding ShowAboutWindowCommand}" />
+        <KeyBinding Key="P" Command="{Binding TogglePercentageCommand}" />
+        <KeyBinding Key="R" Command="{Binding ToggleRelativeDisplayCommand}" />
+    </Window.InputBindings>
+
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Vertical" Command="{Binding ToggleOrientationCommand}" IsCheckable="True"
+                      IsChecked="{Binding Config.Orientation, Converter={StaticResource _menuOrientationConverter}, Mode=OneWay}" />
+            
+            <MenuItem Header="Show percentages" Command="{Binding TogglePercentageCommand}" IsCheckable="True" 
+                      IsChecked="{Binding Config.ShowPercentages, Mode=OneWay}" />
+            <MenuItem Header="Relative values" Command="{Binding ToggleRelativeDisplayCommand}" IsCheckable="True"
+                      IsChecked="{Binding Config.RelativeDisplay, Mode=OneWay}" />
+
+            <MenuItem Header="Clear Lines" Command="{Binding ClearRulerLinesCommand}" />
+            <Separator />
+            <MenuItem Header="About" Command="{Binding ShowAboutWindowCommand}" />
+            <MenuItem Header="Quit" Command="{Binding CloseCommand}" />
+        </ContextMenu>
+    </Window.ContextMenu>
+
+    <Grid>
+        <Canvas Background="White" Margin="{Binding Config.Orientation, Converter={StaticResource _orientationMarginConverter}}" />
+
+        <DockPanel LastChildFill="False" Margin="{Binding Config.Orientation, Converter={StaticResource _orientationMarginConverter}}" ClipToBounds="True">
+            <ruler:RulerTicksDisplay RulerPosition="Top" DockPanel.Dock="Top" Height="30"
+                                     Visibility="{Binding Config.Orientation, Converter={StaticResource _horizontalVisibilityConverter}}" />
+            <ruler:RulerTicksDisplay RulerPosition="Bottom" DockPanel.Dock="Bottom" Height="15"
+                                     Visibility="{Binding Config.Orientation, Converter={StaticResource _horizontalVisibilityConverter}}" />
+        </DockPanel>
+
+        <DockPanel LastChildFill="False" Margin="{Binding Config.Orientation, Converter={StaticResource _orientationMarginConverter}}" ClipToBounds="True">
+            <ruler:RulerTicksDisplay RulerPosition="Left" DockPanel.Dock="Left" Width="30"
+                                     Visibility="{Binding Config.Orientation, Converter={StaticResource _verticalVisibilityConverter}}" />
+            <ruler:RulerTicksDisplay RulerPosition="Right" DockPanel.Dock="Right" Width="30"
+                                     Visibility="{Binding Config.Orientation, Converter={StaticResource _verticalVisibilityConverter}}" />
+        </DockPanel>
+
+        <ruler:RulerBorder Margin="{Binding Config.Orientation, Converter={StaticResource _orientationMarginConverter}}" />
+        <ruler:RulerLineDisplay x:Name="_rulerLineDisplay" Background="Transparent"
+                                Orientation="{Binding Config.Orientation}" />
+    </Grid>
+</Window>

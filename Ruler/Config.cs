@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
-using MiP.Ruler.Annotations;
 using Newtonsoft.Json;
 
 namespace MiP.Ruler
@@ -166,7 +165,6 @@ namespace MiP.Ruler
             File.WriteAllText(ConfigFile, json);
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

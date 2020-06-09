@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MiP.Ruler.Annotations;
 using MiP.Ruler.Commands;
 
 namespace MiP.Ruler
@@ -314,7 +313,6 @@ namespace MiP.Ruler
             Cursor = _currentResizingBox.Cursor;
         }
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

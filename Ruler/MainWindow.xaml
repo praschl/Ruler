@@ -46,6 +46,9 @@
 
     <Window.ContextMenu>
         <ContextMenu>
+            <MenuItem Header="On top" Command="{Binding ToggleOnTopCommand}" IsCheckable="True" 
+                      IsChecked="{Binding Config.OnTop, Mode=OneWay}"/>
+            <Separator />
             <MenuItem Header="Vertical" Command="{Binding ToggleOrientationCommand}" IsCheckable="True"
                       IsChecked="{Binding Config.Orientation, Converter={StaticResource _menuOrientationConverter}, Mode=OneWay}" />
             
@@ -55,6 +58,8 @@
                       IsChecked="{Binding Config.RelativeDisplay, Mode=OneWay}" />
 
             <MenuItem Header="Clear Lines" Command="{Binding ClearRulerLinesCommand}" />
+            <Separator />
+            <MenuItem Header="Minimize" Command="{Binding MinimizeCommand}" />
             <Separator />
             <MenuItem Header="About" Command="{Binding ShowAboutWindowCommand}" />
             <MenuItem Header="Quit" Command="{Binding CloseCommand}" />

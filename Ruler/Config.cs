@@ -14,6 +14,7 @@ namespace MiP.Ruler
         private bool _clearLinesOnOrientationChange;
         private bool _lockOrientationOnResize = true;
         private Orientation _orientation = Orientation.Horizontal;
+        private bool _onTop;
         private bool _showPercentages;
         private double _windowLeft = 100;
         private double _windowTop = 100;
@@ -56,6 +57,17 @@ namespace MiP.Ruler
             {
                 if (value == _lockOrientationOnResize) return;
                 _lockOrientationOnResize = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool OnTop
+        {
+            get { return _onTop; }
+            set
+            {
+                if (value == _onTop) return;
+                _onTop = value;
                 OnPropertyChanged();
             }
         }

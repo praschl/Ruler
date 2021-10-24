@@ -36,6 +36,7 @@ namespace MiP.Ruler
         }
 
         public ICommand CloseCommand => new CloseCommand(this);
+        public ICommand MinimizeCommand => new MinimizeCommand(this);
 
         public ICommand ClearRulerLinesCommand => new ClearRulerLinesCommand(this);
 
@@ -44,8 +45,8 @@ namespace MiP.Ruler
         public ICommand SwitchVerticalCommand => new SwitchOrientationCommand(this, Orientation.Vertical);
         public ICommand ShowAboutWindowCommand => new ShowAboutWindowCommand();
         public ICommand ToggleRelativeDisplayCommand => new ToggleRelativeDisplayCommand(this);
-
         public ICommand TogglePercentageCommand => new TogglePercentageCommand(this);
+        public ICommand ToggleOnTopCommand => new ToggleOnTopCommand(this);
 
         public Config Config { get; } = Config.Instance;
 
@@ -66,6 +67,11 @@ namespace MiP.Ruler
             _rulerLineDisplay.ToggleRelativeDisplay();
         }
 
+        public void ToggleOnTop()
+        {
+            this.Topmost = !this.Topmost;
+        }
+
         private void MainWindow_OnInitialized(object sender, EventArgs e)
         {
             Left = Config.WindowLeft;
@@ -74,6 +80,8 @@ namespace MiP.Ruler
             Height = Config.WindowHeight;
 
             Opacity = Config.Opacity;
+
+            Topmost = Config.OnTop;
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
@@ -84,6 +92,8 @@ namespace MiP.Ruler
             Config.WindowHeight = Height;
 
             Config.Opacity = Opacity;
+
+            Config.OnTop = Topmost;
 
             Config.Save();
         }
